@@ -28,6 +28,7 @@ const meetupSchema = new Schema(
     },
     host: [
       {
+        //@ts-ignore
         type: mongoose.Schema.ObjectId,
         ref: 'User'
       }
