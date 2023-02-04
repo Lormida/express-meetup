@@ -1,30 +1,54 @@
-import config from 'config'
-import express from 'express'
-import connectDatabase from './utils/connectDatabase'
+import express, { NextFunction, Request, Response } from 'express'
+import cors from 'cors'
+import compression from 'compression'
+import createError from 'http-errors'
 import logger from './utils/logger'
 
+// import("helmet")
+// import cookieParser from 'cookie-parser'
+// import helmet from 'helmet'
+
 const app = express()
-const PORT = config.get<number>('port')
+// app.use(cookieParser()
+// app.use(helmet())
 
-const server = app.listen(PORT, async () => {
-  logger.info(`Server is running at port: ${PORT}...`);
-  await connectDatabase()
-}) 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+)
 
-/**
- * Handling critical error events
- */
-process.on('unhandledRejection', (err: Error) => {
-  console.log('UNHANDLED REJECTION! 💥 Shutting down...')
-  console.log(err.name, err.message)
-  server.close(() => {
-    process.exit(1)
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+// compress all responses
+app.use(compression())
+// app.use('/', userRouter)
+// app.use('/auth', authRouter)
+// app.use('/admin', adminRouter)
+
+// Handle production
+if (process.env.NODE_ENV === 'production') {
+  // Static folder
+  app.use(express.static(__dirname + '/public/'))
+  // Handle SPA
+  app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'))
+}
+
+app.all('*', (req, res, next) => {
+  next(new createError(404, `Cant find ${req.originalUrl} on this server!`))
+})
+
+app.use((error : any, req: Request, res: Response, next: NextFunction) => {
+  logger.info('Error handle by bus : ', error.status, error.message, error.stack)
+
+  error.message = error.message || 'Something wrong!'
+  error.status = error.status || 500
+
+  res.status(error.status).json({
+    status: error.status,
+    message: error.message,
   })
 })
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM RECEIVED. Shutting down gracefully...')
-  server.close(() => {
-    console.log('Process terminated...')
-  })
-})
+export default app
