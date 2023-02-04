@@ -1,4 +1,4 @@
-import mongoose, { model, Schema } from 'mongoose'
+import mongoose from 'mongoose'
 // const validator = require('validator')
 import bcrypt from 'bcrypt'
 
@@ -16,7 +16,7 @@ export interface UserDocument extends UserInput, mongoose.Document {
 }
 
 
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -64,4 +64,6 @@ userSchema.methods.comparePassword = async function (candidatePassword: string) 
   }
 }
 
-export default model('User', userSchema)
+const UserModel = mongoose.model<UserDocument>('User', userSchema)
+
+export default UserModel
