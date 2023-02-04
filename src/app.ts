@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import compression from 'compression'
-import createError from 'http-errors'
+import HttpError from './utils/HttpError'
 import logger from './utils/logger'
 
 // import("helmet")
@@ -35,18 +35,14 @@ if (process.env.NODE_ENV === 'production') {
   app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'))
 }
 
-app.all('*', (req, res, next) => {
-  next(new createError(404, `Cant find ${req.originalUrl} on this server!`))
+app.all('*', (req, _, next) => {
+  next(new HttpError(`Cant find ${req.originalUrl} on this server!`, 404))
 })
 
-app.use((error : any, req: Request, res: Response, next: NextFunction) => {
-  logger.info('Error handle by bus : ', error.status, error.message, error.stack)
+app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
+  logger.info('Error handle by bus : ', error.message, error.statusCode, error.stack)
 
-  error.message = error.message || 'Something wrong!'
-  error.status = error.status || 500
-
-  res.status(error.status).json({
-    status: error.status,
+  res.status(error.statusCode).json({
     message: error.message,
   })
 })
