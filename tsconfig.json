@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "target": "ES2020",
+    "sourceMap": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+
+  },
+  "include": ["src/**/*", "server.ts", "src/app.ts"]
+}
