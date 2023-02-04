@@ -1,6 +1,6 @@
 import config from 'config'
 import express from 'express'
-import connectDatabase from './utils/connect'
+import connectDatabase from './utils/connectDatabase'
 import logger from './utils/logger'
 
 const app = express()
