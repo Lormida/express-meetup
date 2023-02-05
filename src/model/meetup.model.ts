@@ -16,21 +16,16 @@ const meetupSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, 'A meetup must have a name'],
+      required: true,
       unique: true,
-      // maxlength: [40, 'A meetup name must have less or equal then 40 characters'],
-      // minlength: [3, 'A meetup name must have more or equal then 3 characters']
     },
     description: {
       type: String,
-      required: [true, 'A meetup must have a description'],
-      // minlength: [3, 'A meetup must have a description at least from 3 symbols'],
-      // manlength: [255, 'A meetup must have a description maximum is from 255 symbols']
-
+      required: true,
     },
     tags: {
       type: [String],
-      required: [true, 'A meetup must have tags'],
+      required: true,
     },
     host: [
       {
