@@ -6,7 +6,7 @@ export interface UserInput {
   email: string;
   nickname: string;
   password: string;
-  role: RoleDocument['_id']
+  role: [RoleDocument['_id']]
 }
 
 export interface UserDocument extends UserInput, mongoose.Document {
@@ -33,10 +33,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     minLength: 8
   },
-  role: {
+  role: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Role'
-  },
+  }],
 }, {
   timestamps: true
 })
