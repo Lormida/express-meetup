@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import Meetup from '../model/meetup.model'
 import { CreateMeetupInput, GetMeetupInput, UpdateMeetupInput } from '../schema/meetup.schema'
-import { createMeetup, deleteMeetup, findAndUpdateMeetup, findMeetup } from '../service/meetup.service'
+import meetupService from '../service/meetup.service'
 
 class MeetupController {
   async getAllMeetups(req: Request, res: Response) {
@@ -11,7 +11,7 @@ class MeetupController {
   async getMeetupById(req: Request<GetMeetupInput["params"]>,
     res: Response) {
     const meetupId = req.params.meetupId;
-    const meetup = await findMeetup({ _id: meetupId });
+    const meetup = await meetupService.findMeetup({ _id: meetupId });
 
     if (!meetup) {
       return res.sendStatus(404);
@@ -25,7 +25,7 @@ class MeetupController {
 
     const body = req.body;
 
-    const newMeetup = await createMeetup({ ...body, host: userId });
+    const newMeetup = await meetupService.createMeetup({ ...body, host: userId });
 
     return res.send(newMeetup);
   }
@@ -37,7 +37,7 @@ class MeetupController {
     const meetupId = req.params.meetupId;
     const update = req.body;
 
-    const meetup = await findMeetup({ _id: meetupId });
+    const meetup = await meetupService.findMeetup({ _id: meetupId });
 
     if (!meetup) {
       return res.sendStatus(404);
@@ -47,7 +47,7 @@ class MeetupController {
       return res.sendStatus(403);
     }
 
-    const updatedMeetup = await findAndUpdateMeetup({ _id: meetupId }, update, {
+    const updatedMeetup = await meetupService.findAndUpdateMeetup({ _id: meetupId }, update, {
       new: true,
     });
 
@@ -58,7 +58,7 @@ class MeetupController {
     const userId = res.locals.user._id;
     const meetupId = req.params.meetupId;
 
-    const meetup = await findMeetup({ _id: meetupId });
+    const meetup = await meetupService.findMeetup({ _id: meetupId });
 
     if (!meetup) {
       return res.sendStatus(404);
@@ -68,7 +68,7 @@ class MeetupController {
       return res.sendStatus(403);
     }
 
-    await deleteMeetup({ id: meetupId });
+    await meetupService.deleteMeetup({ id: meetupId });
 
     return res.sendStatus(200);
   }
