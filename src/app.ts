@@ -5,7 +5,7 @@ import HttpError from './utils/HttpError'
 import { meetupRouter } from './router/meetup.router'
 import cookieParser from 'cookie-parser'
 import config from 'config'
-import { errorMiddleware } from './middleware/errorMiddleware'
+import { errorMiddleware } from './middleware/error.middleware'
 
 // import("helmet")
 // import cookieParser from 'cookie-parser'
