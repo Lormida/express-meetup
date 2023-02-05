@@ -3,6 +3,7 @@ import cors from 'cors'
 import compression from 'compression'
 import HttpError from './utils/HttpError'
 import logger from './utils/logger'
+import { meetupRouter } from './router/meetup.router'
 
 // import("helmet")
 // import cookieParser from 'cookie-parser'
@@ -12,18 +13,18 @@ const app = express()
 // app.use(cookieParser()
 // app.use(helmet())
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-)
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   })
+// )
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 // compress all responses
 app.use(compression())
-// app.use('/', userRouter)
+app.use('/api', meetupRouter)
 // app.use('/auth', authRouter)
 // app.use('/admin', adminRouter)
 

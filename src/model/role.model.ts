@@ -1,5 +1,9 @@
 import mongoose from 'mongoose'
 
+export interface RoleDocument extends mongoose.Document {
+  value: string;
+}
+
 const roleSchema = new mongoose.Schema({
   value: {
     type: String,
@@ -10,6 +14,6 @@ const roleSchema = new mongoose.Schema({
   },
 })
 
-const RoleModel = mongoose.model('Role', roleSchema)
+const RoleModel = mongoose.model<RoleDocument>('Role', roleSchema)
 
 export default RoleModel
