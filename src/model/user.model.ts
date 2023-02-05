@@ -1,12 +1,11 @@
 import mongoose from 'mongoose'
-// const validator = require('validator')
 import bcrypt from 'bcrypt'
 
 export interface UserInput {
   email: string;
   nickname: string;
   password: string;
-  role: 'user' | 'admin'
+  role: 'USER' | 'ADMIN'
 }
 
 export interface UserDocument extends UserInput, mongoose.Document {
@@ -21,7 +20,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    // validate: validator.isEmail
+    match: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   },
   nickname: {
     type: String,
@@ -36,9 +35,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    required: true,
-    enum: ['user', 'admin'],
-    default: 'user'
+    ref: 'Role'
   },
 }, {
   timestamps: true
@@ -63,6 +60,8 @@ userSchema.methods.comparePassword = async function (candidatePassword: string) 
     return false;
   }
 }
+
+userSchema.index({ email: 1, nickname: 1 });
 
 const UserModel = mongoose.model<UserDocument>('User', userSchema)
 

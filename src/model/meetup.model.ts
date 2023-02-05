@@ -40,8 +40,7 @@ const meetupSchema = new Schema(
     },
     host: [
       {
-        //@ts-ignore
-        type: mongoose.Schema.ObjectId,
+        type: String,
         ref: 'User'
       }
     ]
@@ -53,7 +52,6 @@ const meetupSchema = new Schema(
 meetupSchema.virtual('slug').get(function () {
   return this.name.split(' ').map(el => el.toLowerCase()).join('-');
 });
-
 
 meetupSchema.index({ name: 1, createdAt: 1 });
 
