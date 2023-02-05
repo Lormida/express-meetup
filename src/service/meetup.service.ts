@@ -2,7 +2,6 @@ import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import MeetupModel, { MeetupDocument, MeetupInput } from "../model/meetup.model";
 
 
-
 export async function createMeetup(input: MeetupInput) {
   return MeetupModel.create(input)
 }
