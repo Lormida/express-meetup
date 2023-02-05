@@ -22,8 +22,8 @@ const payload = {
 
 const params = {
   params: object({
-    id: string({
-      required_error: "meetup id is required",
+    meetupId: string({
+      required_error: "meetupId is required",
     }),
   }),
 };
@@ -47,5 +47,5 @@ export const getMeetupSchema = object({
 
 export type CreateMeetupInput = TypeOf<typeof createMeetupSchema>;
 export type UpdateMeetupInput = TypeOf<typeof updateMeetupSchema>;
-export type ReadMeetupInput = TypeOf<typeof getMeetupSchema>;
+export type GetMeetupInput = TypeOf<typeof getMeetupSchema>;
 export type DeleteMeetupInput = TypeOf<typeof deleteMeetupSchema>;

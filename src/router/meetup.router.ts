@@ -8,7 +8,7 @@ const router = Router()
 
 router.get('/meetups', meetupController.getAllMeetups)
 
-router.get('/meetup/:id',
+router.get('/meetup/:meetupId',
   [validateResource(getMeetupSchema)],
   meetupController.getMeetupById)
 
@@ -17,12 +17,12 @@ router.post('/create-meetup',
   meetupController.createMeetup
 )
 
-router.put('/meetup/:id',
+router.put('/meetup/:meetupId',
   [validateResource(updateMeetupSchema)],
   meetupController.updateMeetupById
 )
 
-router.delete('/meetup/:id',
+router.delete('/meetup/:meetupId',
   [validateResource(deleteMeetupSchema)],
   meetupController.deleteMeetupById
 )
