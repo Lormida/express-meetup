@@ -21,9 +21,14 @@ export class APIFeatures<T> {
     let queryStr = JSON.stringify(queryObj)
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
 
-    console.log('queryString:', queryStr)
+    const queryStrParsed = JSON.parse(queryStr)
 
-    this.query = this.query.find(JSON.parse(queryStr))
+    // Partal string search
+    Object.keys(queryStrParsed).forEach((key) => {
+      queryStrParsed[key] = { $regex: queryStrParsed[key] }
+    })
+
+    this.query = this.query.find(queryStrParsed)
 
     return this
   }

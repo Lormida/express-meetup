@@ -7,7 +7,7 @@ const router = Router()
 
 // router.use(authController.isAuth)
 
-router.get('/meetups', isAuthMiddleware, meetupController.getAllMeetups)
+router.get('/meetups', isAuthMiddleware, meetupController.getAllMeetups())
 
 router.get('/meetup/:meetupId', [isAuthMiddleware, validateResource(getMeetupSchema)], meetupController.getMeetupById)
 

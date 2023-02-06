@@ -2,12 +2,14 @@ import { Request, Response } from 'express'
 import Meetup from '../model/meetup.model'
 import { CreateMeetupInput, GetMeetupInput, UpdateMeetupInput } from '../schema/meetup.schema'
 import meetupService from '../service/meetup.service'
+import { HandlerFactory } from './handlerFactory.controller'
 
 class MeetupController {
-  async getAllMeetups(req: Request, res: Response) {
-    const allMeetups = await Meetup.find()
-    return res.send(allMeetups)
+  getAllMeetups() {
+    const handlerFactory = new HandlerFactory(Meetup)
+    return handlerFactory.getAll()
   }
+
   async getMeetupById(req: Request<GetMeetupInput['params']>, res: Response) {
     const meetupId = req.params.meetupId
     const meetup = await meetupService.findMeetup({ _id: meetupId })
