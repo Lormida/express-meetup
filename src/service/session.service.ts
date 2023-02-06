@@ -6,10 +6,13 @@ import sessionModel from '../model/sesssion.model';
 const JWT_ACCESS_SECRET = config.get<string>('JWT_ACCESS_SECRET')
 const JWT_REFRESH_SECRET = config.get<string>('JWT_REFRESH_SECRET')
 
+const ACCESS_TOKEN_EXPIRATION = config.get<string>('ACCESS_TOKEN_EXPIRATION')
+const REFRESH_TOKEN_EXPIRATION = config.get<string>('REFRESH_TOKEN_EXPIRATION')
+
 class SessionService {
   generateTokens(payload: UserDto) {
-    const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, { expiresIn: '15s' })
-    const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '30s' })
+    const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRATION })
+    const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRATION })
     return {
       accessToken,
       refreshToken
@@ -26,10 +29,14 @@ class SessionService {
   }
 
   validateRefreshToken(token: string) {
+
     try {
       const userData = jwt.verify(token, JWT_REFRESH_SECRET);
+
       return userData;
     } catch (e) {
+      console.log('Refresh token is expired?');
+
       return null;
     }
   }

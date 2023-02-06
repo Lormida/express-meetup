@@ -5,17 +5,21 @@ import HttpError from "../utils/HttpError";
 
 export const isAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
+    
     const authorizationHeader = req.headers.authorization;
+
     if (!authorizationHeader) {
       return next(HttpError.UnauthorizedError());
     }
 
     const accessToken = authorizationHeader.split(' ')[1];
+
     if (!accessToken) {
       return next(HttpError.UnauthorizedError());
     }
 
     const userData = sessionService.validateAccessToken(accessToken);
+    
     if (!userData) {
       return next(HttpError.UnauthorizedError());
     }

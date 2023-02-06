@@ -24,6 +24,7 @@ class UserController {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
+
       const userData = await userService.login(email, password);
 
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
@@ -49,6 +50,7 @@ class UserController {
     try {
       const { refreshToken } = req.cookies;
       const userData = await userService.refresh(refreshToken);
+
 
       // TODO: chech is it's possible
       if (!userData) {

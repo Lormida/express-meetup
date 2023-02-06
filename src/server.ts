@@ -15,8 +15,7 @@ const server = app.listen(PORT, async () => {
  * Handling critical error events
  */
 process.on('unhandledRejection', (err: Error) => {
-  logger.error('UNHANDLED REJECTION! 💥 Shutting down...')
-  logger.error(err.name, err.message)
+  logger.error({ name: err.name, message: err.message }, 'UNHANDLED REJECTION! 💥 Shutting down...')
   server.close(() => {
     process.exit(1)
   })

@@ -6,10 +6,9 @@ import { createUserSchema } from '../schema/user.schema';
 import { loginUserSchema } from '../schema/login.schema';
 const router = Router()
 
+router.get('/auth/refresh', userController.refresh);
 
-router.get('/api/users', /* isAuthMiddleware */ userController.getUsers);
-
-router.get('/auth/refresh', isAuthMiddleware, userController.refresh);
+router.get('/api/users', isAuthMiddleware, userController.getUsers);
 router.post('/auth/logout', isAuthMiddleware, userController.logout);
 
 router.post('/auth/registration',
