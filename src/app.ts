@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import config from 'config'
 import { errorMiddleware } from './middleware/error.middleware'
 import { userRouter } from './router/user.router'
+import deserializeUser from './middleware/deserializeUser.middleware'
 
 // import("helmet")
 // import cookieParser from 'cookie-parser'
@@ -14,6 +15,8 @@ import { userRouter } from './router/user.router'
 
 const app = express()
 app.use(express.json())
+app.use(deserializeUser)
+
 app.use(cookieParser())
 // app.use(helmet())
 app.use(

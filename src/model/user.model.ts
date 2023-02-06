@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role',
+        required: true,
       },
     ],
   },
@@ -60,6 +61,10 @@ userSchema.methods.comparePassword = async function (candidatePassword: string) 
     return false
   }
 }
+
+userSchema.pre(/^find/, function () {
+  this.populate({ path: 'roles', select: 'value -_id' })
+})
 
 userSchema.index({ email: 1, name: 1 })
 

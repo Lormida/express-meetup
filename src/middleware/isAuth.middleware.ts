@@ -22,9 +22,6 @@ export const isAuthMiddleware = (req: Request, res: Response, next: NextFunction
     if (!userData) {
       return next(HttpError.UnauthorizedError())
     }
-
-    //@ts-expect-error fix later
-    req.user = userData
     next()
   } catch (e) {
     return next(HttpError.UnauthorizedError())

@@ -4,6 +4,6 @@ export default {
   CLIENT_URL: 'http://localhost:3000',
   JWT_ACCESS_SECRET: 'jwt-secret-key',
   JWT_REFRESH_SECRET: 'jwt-refresh-secret-key',
-  ACCESS_TOKEN_EXPIRATION: '1h',
+  ACCESS_TOKEN_EXPIRATION: '4h',
   REFRESH_TOKEN_EXPIRATION: '24h',
 }

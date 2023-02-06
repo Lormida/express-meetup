@@ -20,8 +20,8 @@ class MeetupController {
   }
   async createMeetup(req: Request<{}, {}, CreateMeetupInput['body']>, res: Response) {
     console.log(res.locals)
-
-    const userId = res.locals.user?._id
+    // TODO :FIx resl
+    const userId = res.locals.user.id
 
     const body = req.body
 
@@ -33,7 +33,7 @@ class MeetupController {
     return res.send(newMeetup)
   }
   async updateMeetupById(req: Request<UpdateMeetupInput['params']>, res: Response) {
-    const userId = res.locals.user._id
+    const userId = res.locals.user.id
 
     const meetupId = req.params.meetupId
     const update = req.body
@@ -55,7 +55,7 @@ class MeetupController {
     return res.send(updatedMeetup)
   }
   async deleteMeetupById(req: Request<UpdateMeetupInput['params']>, res: Response) {
-    const userId = res.locals.user._id
+    const userId = res.locals.user.id
     const meetupId = req.params.meetupId
 
     const meetup = await meetupService.findMeetup({ _id: meetupId })

@@ -7,6 +7,7 @@ import { QueryOptions } from 'mongoose'
 class UserService {
   async createSession(user: UserDocument) {
     const userDto = new UserDto(user)
+
     const tokens = sessionService.generateTokens({ ...userDto })
 
     await sessionService.saveToken(userDto.id, tokens.refreshToken)
@@ -67,7 +68,7 @@ class UserService {
   }
 
   async findAllUsers(options: QueryOptions = {}) {
-    return UserModel.find({}, {}).populate({ path: 'roles', select: 'value' })
+    return UserModel.find({}, {})
   }
 }
 

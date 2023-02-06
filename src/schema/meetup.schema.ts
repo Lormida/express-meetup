@@ -15,9 +15,6 @@ const payload = {
         required_error: 'A meetup must have tags',
       })
     ).min(2),
-    host: string({
-      required_error: "Can't be meetup without host",
-    }),
   }),
 }
 
