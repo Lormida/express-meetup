@@ -345,7 +345,7 @@
   integrity sha512-zOF+RzQ+wfF7tq7tGUdPcqUTh3+k2f8KCVJE07A8kCopVq4nBu4NH6Eq29Tjpwdya3YlKvE+kFssuQRRRRex+Q==
   dependencies:
     "@aws-sdk/protocol-http" "3.257.0"
-    "@aws-sdk/querystring-builder" "3.257.0"
+    "@aws-sdk/queryObject-builder" "3.257.0"
     "@aws-sdk/types" "3.257.0"
     "@aws-sdk/util-base64" "3.208.0"
     tslib "^2.3.1"
@@ -502,7 +502,7 @@
   dependencies:
     "@aws-sdk/abort-controller" "3.257.0"
     "@aws-sdk/protocol-http" "3.257.0"
-    "@aws-sdk/querystring-builder" "3.257.0"
+    "@aws-sdk/queryObject-builder" "3.257.0"
     "@aws-sdk/types" "3.257.0"
     tslib "^2.3.1"
 
@@ -522,18 +522,18 @@
     "@aws-sdk/types" "3.257.0"
     tslib "^2.3.1"
 
-"@aws-sdk/querystring-builder@3.257.0":
+"@aws-sdk/queryObject-builder@3.257.0":
   version "3.257.0"
-  resolved "https://registry.npmjs.org/@aws-sdk/querystring-builder/-/querystring-builder-3.257.0.tgz"
+  resolved "https://registry.npmjs.org/@aws-sdk/queryObject-builder/-/queryObject-builder-3.257.0.tgz"
   integrity sha512-mZHWLP7XIkzx1GIXO5WfX/iJ+aY9TWs02RE9FkdL2+by0HEMR65L3brQTbU1mIBJ7BjaPwYH24dljUOSABX7yg==
   dependencies:
     "@aws-sdk/types" "3.257.0"
     "@aws-sdk/util-uri-escape" "3.201.0"
     tslib "^2.3.1"
 
-"@aws-sdk/querystring-parser@3.257.0":
+"@aws-sdk/queryObject-parser@3.257.0":
   version "3.257.0"
-  resolved "https://registry.npmjs.org/@aws-sdk/querystring-parser/-/querystring-parser-3.257.0.tgz"
+  resolved "https://registry.npmjs.org/@aws-sdk/queryObject-parser/-/queryObject-parser-3.257.0.tgz"
   integrity sha512-UDrE1dEwWrWT8dG2VCrGYrPxCWOkZ1fPTPkjpkR4KZEdQDZBqU5gYZF2xPj8Nz7pjQVHFuW2wFm3XYEk56GEjg==
   dependencies:
     "@aws-sdk/types" "3.257.0"
@@ -597,7 +597,7 @@
   resolved "https://registry.npmjs.org/@aws-sdk/url-parser/-/url-parser-3.257.0.tgz"
   integrity sha512-Qe/AcFe/NFZHa6cN2afXEQn9ehXxh57dWGdRjfjd2lQqNV4WW1R2pl2Tm1ZJ1dwuCNLJi4NHLMk8lrD3QQ8rdg==
   dependencies:
-    "@aws-sdk/querystring-parser" "3.257.0"
+    "@aws-sdk/queryObject-parser" "3.257.0"
     "@aws-sdk/types" "3.257.0"
     tslib "^2.3.1"
 
