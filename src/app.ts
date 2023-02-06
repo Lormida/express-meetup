@@ -16,10 +16,12 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 // app.use(helmet())
-app.use(cors({
-  credentials: true,
-  origin: config.get<string>('CLIENT_URL')
-}));
+app.use(
+  cors({
+    credentials: true,
+    origin: config.get<string>('CLIENT_URL'),
+  })
+)
 app.use(compression())
 app.use('/api', meetupRouter)
 app.use('/', userRouter)

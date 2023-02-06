@@ -1,15 +1,15 @@
-import { UserDto } from "../dto/User.dto";
-import UserModel, { UserDocument } from "../model/user.model";
-import HttpError from "../utils/HttpError";
-import sessionService from "./session.service";
-import { QueryOptions } from "mongoose";
+import { UserDto } from '../dto/User.dto'
+import UserModel, { UserDocument } from '../model/user.model'
+import HttpError from '../utils/HttpError'
+import sessionService from './session.service'
+import { QueryOptions } from 'mongoose'
 
 class UserService {
   async createSession(user: UserDocument) {
-    const userDto = new UserDto(user);
-    const tokens = sessionService.generateTokens({ ...userDto });
-    
-    await sessionService.saveToken(userDto.id, tokens.refreshToken);
+    const userDto = new UserDto(user)
+    const tokens = sessionService.generateTokens({ ...userDto })
+
+    await sessionService.saveToken(userDto.id, tokens.refreshToken)
 
     return { ...tokens, user: userDto }
   }
@@ -29,34 +29,36 @@ class UserService {
     if (!user) {
       throw HttpError.BadRequest('User with such email is not found')
     }
-    
-    const isPasswordsEqual = await user.comparePassword(password);
+
+    const isPasswordsEqual = await user.comparePassword(password)
     if (!isPasswordsEqual) {
-      throw HttpError.BadRequest('Wrong password');
+      throw HttpError.BadRequest('Wrong password')
     }
     return this.createSession(user)
   }
 
   async logout(refreshToken: string) {
-    const token = await sessionService.removeToken(refreshToken);
-    return token;
+    const token = await sessionService.removeToken(refreshToken)
+    return token
   }
 
   async refresh(refreshToken: string) {
     if (!refreshToken) {
-      throw HttpError.UnauthorizedError();
+      throw HttpError.UnauthorizedError()
     }
-    const userData = sessionService.validateRefreshToken(refreshToken) as { id: string };
-    
-    const tokenFromDb = await sessionService.findToken(refreshToken);
+    const userData = sessionService.validateRefreshToken(refreshToken) as {
+      id: string
+    }
+
+    const tokenFromDb = await sessionService.findToken(refreshToken)
     if (!userData?.id || !tokenFromDb) {
-      throw HttpError.UnauthorizedError();
+      throw HttpError.UnauthorizedError()
     }
 
-    const user = await UserModel.findById(userData.id);
+    const user = await UserModel.findById(userData.id)
 
-    console.log('user:', user);
-    
+    console.log('user:', user)
+
     if (user) {
       return this.createSession(user)
     }
@@ -64,14 +66,10 @@ class UserService {
     return null
   }
 
-  async findAllUsers(
-    options: QueryOptions = {}
-  ) {
+  async findAllUsers(options: QueryOptions = {}) {
     return UserModel.find({}, {}).populate({ path: 'roles', select: 'value' })
-
   }
 }
 
-const userService = new UserService();
+const userService = new UserService()
 export default userService
-

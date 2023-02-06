@@ -1,33 +1,32 @@
-import { Response, Request, NextFunction } from "express";
+import { Response, Request, NextFunction } from 'express'
 
-import sessionService from "../service/session.service";
-import HttpError from "../utils/HttpError";
+import sessionService from '../service/session.service'
+import HttpError from '../utils/HttpError'
 
 export const isAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
-    
-    const authorizationHeader = req.headers.authorization;
+    const authorizationHeader = req.headers.authorization
 
     if (!authorizationHeader) {
-      return next(HttpError.UnauthorizedError());
+      return next(HttpError.UnauthorizedError())
     }
 
-    const accessToken = authorizationHeader.split(' ')[1];
+    const accessToken = authorizationHeader.split(' ')[1]
 
     if (!accessToken) {
-      return next(HttpError.UnauthorizedError());
+      return next(HttpError.UnauthorizedError())
     }
 
-    const userData = sessionService.validateAccessToken(accessToken);
-    
+    const userData = sessionService.validateAccessToken(accessToken)
+
     if (!userData) {
-      return next(HttpError.UnauthorizedError());
+      return next(HttpError.UnauthorizedError())
     }
 
-    //@ts-ignore temp
-    req.user = userData;
-    next();
+    //@ts-expect-error fix later
+    req.user = userData
+    next()
   } catch (e) {
-    return next(HttpError.UnauthorizedError());
+    return next(HttpError.UnauthorizedError())
   }
-};
+}

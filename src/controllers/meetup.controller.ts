@@ -8,72 +8,69 @@ class MeetupController {
     const allMeetups = await Meetup.find()
     return res.send(allMeetups)
   }
-  async getMeetupById(req: Request<GetMeetupInput["params"]>,
-    res: Response) {
-    const meetupId = req.params.meetupId;
-    const meetup = await meetupService.findMeetup({ _id: meetupId });
+  async getMeetupById(req: Request<GetMeetupInput['params']>, res: Response) {
+    const meetupId = req.params.meetupId
+    const meetup = await meetupService.findMeetup({ _id: meetupId })
 
     if (!meetup) {
-      return res.sendStatus(404);
+      return res.sendStatus(404)
     }
 
-    return res.send(meetup);
+    return res.send(meetup)
   }
-  async createMeetup(req: Request<{}, {}, CreateMeetupInput["body"]>, res: Response) {
+  async createMeetup(req: Request<{}, {}, CreateMeetupInput['body']>, res: Response) {
+    const userId = res.locals.user._id
 
-    const userId = res.locals.user._id;
+    const body = req.body
 
-    const body = req.body;
+    const newMeetup = await meetupService.createMeetup({
+      ...body,
+      host: userId,
+    })
 
-    const newMeetup = await meetupService.createMeetup({ ...body, host: userId });
-
-    return res.send(newMeetup);
+    return res.send(newMeetup)
   }
-  async updateMeetupById(req: Request<UpdateMeetupInput["params"]>,
-    res: Response) {
+  async updateMeetupById(req: Request<UpdateMeetupInput['params']>, res: Response) {
+    const userId = res.locals.user._id
 
-    const userId = res.locals.user._id;
+    const meetupId = req.params.meetupId
+    const update = req.body
 
-    const meetupId = req.params.meetupId;
-    const update = req.body;
-
-    const meetup = await meetupService.findMeetup({ _id: meetupId });
+    const meetup = await meetupService.findMeetup({ _id: meetupId })
 
     if (!meetup) {
-      return res.sendStatus(404);
+      return res.sendStatus(404)
     }
 
     if (String(meetup.host) !== userId) {
-      return res.sendStatus(403);
+      return res.sendStatus(403)
     }
 
     const updatedMeetup = await meetupService.findAndUpdateMeetup({ _id: meetupId }, update, {
       new: true,
-    });
+    })
 
-    return res.send(updatedMeetup);
+    return res.send(updatedMeetup)
   }
-  async deleteMeetupById(req: Request<UpdateMeetupInput["params"]>,
-    res: Response) {
-    const userId = res.locals.user._id;
-    const meetupId = req.params.meetupId;
+  async deleteMeetupById(req: Request<UpdateMeetupInput['params']>, res: Response) {
+    const userId = res.locals.user._id
+    const meetupId = req.params.meetupId
 
-    const meetup = await meetupService.findMeetup({ _id: meetupId });
+    const meetup = await meetupService.findMeetup({ _id: meetupId })
 
     if (!meetup) {
-      return res.sendStatus(404);
+      return res.sendStatus(404)
     }
 
     if (String(meetup.host) !== userId) {
-      return res.sendStatus(403);
+      return res.sendStatus(403)
     }
 
-    await meetupService.deleteMeetup({ id: meetupId });
+    await meetupService.deleteMeetup({ id: meetupId })
 
-    return res.sendStatus(200);
+    return res.sendStatus(200)
   }
 }
-
 
 const meetupController = new MeetupController()
 export { meetupController }

@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
-import { UserDocument } from './user.model';
+import { UserDocument } from './user.model'
 
 export interface SessionDocument extends mongoose.Document {
-  user: UserDocument["_id"];
-  refreshToken: string;
-  userAgent: string;
-  createdAt: Date;
-  updatedAt: Date;
+  user: UserDocument['_id']
+  refreshToken: string
+  userAgent: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 const SessionSchema = new mongoose.Schema({
@@ -15,5 +15,5 @@ const SessionSchema = new mongoose.Schema({
   userAgent: { type: String },
 })
 
-const SessionModel = mongoose.model<SessionDocument>('Session', SessionSchema);
+const SessionModel = mongoose.model<SessionDocument>('Session', SessionSchema)
 export default SessionModel

@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "eslint": "eslint --fix"
+    "lint": "eslint src/**/*.ts",
+    "lintfix": "prettier --write --list-different . && yarn lint --fix"
   },
   "keywords": [],
   "author": "",

@@ -2,15 +2,15 @@ import mongoose, { Schema, model } from 'mongoose'
 import { UserDocument } from './user.model'
 
 export interface MeetupInput {
-  name: string;
-  description: string;
-  tags: string[];
-  host: UserDocument["_id"];
+  name: string
+  description: string
+  tags: string[]
+  host: UserDocument['_id']
 }
 
 export interface MeetupDocument extends MeetupInput, mongoose.Document {
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date
+  updatedAt: Date
 }
 const meetupSchema = new Schema(
   {
@@ -30,19 +30,20 @@ const meetupSchema = new Schema(
     host: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    ]
-  }, {
-  timestamps: true
-}
-);
+        ref: 'User',
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+)
 
 /* meetupSchema.virtual('slug').get(function () {
   return this.name.split(' ').map(el => el.toLowerCase()).join('-');
 }); */
 
-meetupSchema.index({ name: 1 });
+meetupSchema.index({ name: 1 })
 
-const MeetupModel = model<MeetupDocument>('Meetup', meetupSchema);
+const MeetupModel = model<MeetupDocument>('Meetup', meetupSchema)
 export default MeetupModel
