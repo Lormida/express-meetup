@@ -5,11 +5,14 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "target": "ES2020",
+    "noImplicitAny": true,
+    "target": "ES5",
     "sourceMap": true,
     "outDir": "dist",
     "skipLibCheck": true,
 
   },
-  "include": ["src/**/*", "src/server.ts", "src/app.ts"]
+  "lib": ["ES2020"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

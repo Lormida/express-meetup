@@ -18,7 +18,7 @@ class UserService {
     if (candidate) {
       throw HttpError.BadRequest(`User with ${email} already exists`)
     }
-    
+
     const user = await UserModel.create({ email, name, password, roles })
 
     return this.createSession(user)

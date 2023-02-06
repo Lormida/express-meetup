@@ -10,7 +10,9 @@ async function connectDatabase() {
     logger.info('DB connection successful...')
 
   } catch (err) {
-    logger.error(err, 'Failure during connection to database')
+    logger.error(
+      
+      err, 'Failure during connection to database')
     process.exit(1)
   }
 }
