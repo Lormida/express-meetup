@@ -15,5 +15,5 @@ const SessionSchema = new mongoose.Schema({
   userAgent: { type: String },
 })
 
-const SessionModel = mongoose.model('Session', SessionSchema);
+const SessionModel = mongoose.model<SessionDocument>('Session', SessionSchema);
 export default SessionModel

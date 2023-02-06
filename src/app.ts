@@ -6,6 +6,7 @@ import { meetupRouter } from './router/meetup.router'
 import cookieParser from 'cookie-parser'
 import config from 'config'
 import { errorMiddleware } from './middleware/error.middleware'
+import { userRouter } from './router/user.router'
 
 // import("helmet")
 // import cookieParser from 'cookie-parser'
@@ -21,7 +22,7 @@ app.use(cors({
 }));
 app.use(compression())
 app.use('/api', meetupRouter)
-
+app.use('/', userRouter)
 
 // Handle production
 if (process.env.NODE_ENV === 'production') {

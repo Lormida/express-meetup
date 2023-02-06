@@ -1,14 +1,19 @@
 import { Request, Response, NextFunction } from 'express'
 import userService from '../service/user.service';
 import HttpError from '../utils/HttpError';
-
+import RoleModel from '../model/role.model';
 
 class UserController {
   async registration(req: Request, res: Response, next: NextFunction) {
     try {
 
-      const { email, password } = req.body;
-      const userData = await userService.registration(email, password);
+      const { email, name, password } = req.body;
+
+      const userRole = await RoleModel.findOne({ value: 'USER' })
+
+      if (!userRole) throw HttpError.BadRequest('User role not found')
+
+      const userData = await userService.registration(email, name, password, [userRole._id]);
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
       return res.send(userData);
     } catch (e) {

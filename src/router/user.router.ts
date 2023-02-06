@@ -7,15 +7,16 @@ import { loginUserSchema } from '../schema/login.schema';
 const router = Router()
 
 
-router.get('/users', isAuthMiddleware, userController.getUsers);
-router.get('/refresh', isAuthMiddleware, userController.refresh);
-router.post('/logout', isAuthMiddleware, userController.logout);
+router.get('/api/users', /* isAuthMiddleware */ userController.getUsers);
 
-router.post('/registration',
+router.get('/auth/refresh', isAuthMiddleware, userController.refresh);
+router.post('/auth/logout', isAuthMiddleware, userController.logout);
+
+router.post('/auth/registration',
   [validateResource(createUserSchema)],
   userController.registration
 );
-router.post('/login',
+router.post('/auth/login',
   [validateResource(loginUserSchema)],
   userController.login
 );

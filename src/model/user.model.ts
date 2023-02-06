@@ -4,9 +4,9 @@ import { RoleDocument } from './role.model'
 
 export interface UserInput {
   email: string;
-  nickname: string;
+  name: string;
   password: string;
-  role: [RoleDocument['_id']]
+  roles: [RoleDocument['_id']]
 }
 
 export interface UserDocument extends UserInput, mongoose.Document {
@@ -22,18 +22,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  nickname: {
+  name: {
     type: String,
     required: true,
-    minlength: [3, 'A nickname must includes at least 2 symbols'],
-    manlength: [40, 'A nickname must includes maximum 40 symbols']
   },
   password: {
     type: String,
     required: true,
-    minLength: 8
   },
-  role: [{
+  roles: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Role'
   }],
@@ -61,7 +58,7 @@ userSchema.methods.comparePassword = async function (candidatePassword: string) 
   }
 }
 
-userSchema.index({ email: 1, nickname: 1 });
+userSchema.index({ email: 1, name: 1 });
 
 const UserModel = mongoose.model<UserDocument>('User', userSchema)
 

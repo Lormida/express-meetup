@@ -13,14 +13,14 @@ class UserService {
 
     return { ...tokens, user: userDto }
   }
-  async registration(email: string, password: string) {
+  async registration(email: string, name: string, password: string, roles: string[]) {
     const candidate = await UserModel.findOne({ email })
     if (candidate) {
       throw HttpError.BadRequest(`User with ${email} already exists`)
     }
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const user = await UserModel.create({ email, password: hashPassword })
+    const user = await UserModel.create({ email, name, password: hashPassword, roles })
 
     return this.createSession(user)
   }
@@ -30,7 +30,7 @@ class UserService {
     if (!user) {
       throw HttpError.BadRequest('User with such email is not found')
     }
-    const isPasswordsEqual = await bcrypt.compare(password, user.password);
+    const isPasswordsEqual = await user.comparePassword(password);
     if (!isPasswordsEqual) {
       throw HttpError.BadRequest('Wrong password');
     }
@@ -62,9 +62,9 @@ class UserService {
   }
 
   async findAllUsers(
-    options: QueryOptions = { lean: true }
+    options: QueryOptions = {}
   ) {
-    return UserModel.find({}, options);
+    return UserModel.find({}, {}).populate({ path: 'roles', select: 'value' })
 
   }
 }
