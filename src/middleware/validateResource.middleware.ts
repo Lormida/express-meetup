@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { AnyZodObject } from 'zod'
+import logger from '../utils/logger'
 
 const validate = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -11,6 +12,8 @@ const validate = (schema: AnyZodObject) => (req: Request, res: Response, next: N
     next()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
+    logger.error(e, 'Error zod validation')
+
     return res.status(400).send(e?.errors)
   }
 }

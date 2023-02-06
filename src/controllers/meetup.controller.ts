@@ -19,7 +19,9 @@ class MeetupController {
     return res.send(meetup)
   }
   async createMeetup(req: Request<{}, {}, CreateMeetupInput['body']>, res: Response) {
-    const userId = res.locals.user._id
+    console.log(res.locals)
+
+    const userId = res.locals.user?._id
 
     const body = req.body
 

@@ -11,11 +11,13 @@ export class APIFeatures<T> {
 
   filter() {
     const queryObj = { ...this.queryObject }
-    console.log(queryObj)
+    console.log('queryObj', queryObj)
 
     const excludedFields = ['page', 'sort', 'limit', 'fields']
+    //@ts-expect-error fix later
     excludedFields.forEach((el) => delete queryObj[el])
-    // 1B) Advanced filtering
+
+    //  Advanced filtering
     let queryStr = JSON.stringify(queryObj)
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
 

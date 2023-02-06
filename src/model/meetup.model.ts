@@ -27,12 +27,11 @@ const meetupSchema = new Schema(
       type: [String],
       required: true,
     },
-    host: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
+    host: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     timestamps: true,
