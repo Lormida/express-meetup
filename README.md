@@ -1,9 +1,13 @@
 <p align="center">
+  <a href="#deploy">Deploy</a>
   <a href="#key-features">Key Features</a>  •
   <a href="#stack">Stack</a> •
   <a href="#documentation">Documentation</a> •
 </p>
 
+## Deploy
+
+- [Check API in the browser](https://express-meetup.onrender.com/api/users)
 
 ## Key Features
 
