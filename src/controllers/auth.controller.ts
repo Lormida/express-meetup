@@ -1,80 +1,56 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 import userService from '../service/user.service'
 import HttpError from '../utils/HttpError'
 import RoleModel from '../model/role.model'
+import { catchAsync } from '../utils/catchAsync'
+import { setCookie } from '../utils/helpers'
 
-function registrationUser(role: 'USER' | 'ADMIN') {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { email, name, password } = req.body
+const registrationUser = (role: 'USER' | 'ADMIN') =>
+  catchAsync(async (req: Request, res: Response) => {
+    const { email, name, password } = req.body
 
-      const userRole = await RoleModel.findOne({ value: role })
+    const userRole = await RoleModel.findOne({ value: role })
+    if (!userRole) throw HttpError.BadRequestError('User role not found')
 
-      if (!userRole) throw HttpError.BadRequestError('User role not found')
+    const userData = await userService.registration(email, name, password, [userRole._id])
 
-      const userData = await userService.registration(email, name, password, [userRole._id])
-      res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      })
-      return res.send(userData)
-    } catch (e) {
-      next(e)
-    }
-  }
-}
+    setCookie(res, 'refreshToken', userData.refreshToken)
+
+    res.send(userData)
+  })
 
 class UserController {
   registration(role: 'USER' | 'ADMIN') {
     return registrationUser(role)
   }
 
-  async login(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { email, password } = req.body
+  login = catchAsync(async (req: Request, res: Response) => {
+    const { email, password } = req.body
 
-      const userData = await userService.login(email, password)
+    const userData = await userService.login(email, password)
+    setCookie(res, 'refreshToken', userData.refreshToken)
 
-      res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      })
+    res.send(userData)
+  })
 
-      return res.send(userData)
-    } catch (e) {
-      next(e)
-    }
-  }
+  logout = catchAsync(async (req: Request, res: Response) => {
+    const { refreshToken } = req.cookies
+    const token = await userService.logout(refreshToken)
 
-  async logout(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { refreshToken } = req.cookies
-      const token = await userService.logout(refreshToken)
-      res.clearCookie('refreshToken')
-      return res.send(token)
-    } catch (e) {
-      next(e)
-    }
-  }
+    res.clearCookie('refreshToken')
+    res.send(token)
+  })
 
-  async refresh(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { refreshToken } = req.cookies
-      const userData = await userService.refresh(refreshToken)
+  refresh = catchAsync(async (req: Request, res: Response) => {
+    const { refreshToken } = req.cookies
+    const userData = await userService.refresh(refreshToken)
 
-      // TODO: chech is it's possible
-      if (!userData) {
-        throw HttpError.UnauthorizedError()
-      }
-      res.cookie('refreshToken', userData.refreshToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      })
-      return res.send(userData)
-    } catch (e) {
-      next(e)
-    }
-  }
+    if (!userData) throw HttpError.UnauthorizedError()
+
+    setCookie(res, 'refreshToken', userData.refreshToken)
+
+    res.send(userData)
+  })
 }
 
 const userController = new UserController()

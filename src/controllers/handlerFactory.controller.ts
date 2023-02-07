@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
+
+/**
+ * Potentially this class can be used to create reusable controller, but too many but
+ * The main issue, that this code is badly scales (my opinion) or overengenering
+ */
 import mongoose from 'mongoose'
 import HttpError from '../utils/HttpError'
 import { Request, Response, NextFunction } from 'express'
