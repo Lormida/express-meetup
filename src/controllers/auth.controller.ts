@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import userService from '../service/user.service'
+import authService from '../service/auth.service'
 import HttpError from '../utils/HttpError'
 import RoleModel from '../model/role.model'
 import { catchAsync } from '../utils/catchAsync'
@@ -12,7 +12,7 @@ const registrationUser = (role: 'USER' | 'ADMIN') =>
     const userRole = await RoleModel.findOne({ value: role })
     if (!userRole) throw HttpError.BadRequestError('User role not found')
 
-    const userData = await userService.registration(email, name, password, [userRole._id])
+    const userData = await authService.registration(email, name, password, [userRole._id])
 
     setCookie(res, 'refreshToken', userData.refreshToken)
 
@@ -27,7 +27,7 @@ class UserController {
   login = catchAsync(async (req: Request, res: Response) => {
     const { email, password } = req.body
 
-    const userData = await userService.login(email, password)
+    const userData = await authService.login(email, password)
     setCookie(res, 'refreshToken', userData.refreshToken)
 
     res.send(userData)
@@ -35,7 +35,7 @@ class UserController {
 
   logout = catchAsync(async (req: Request, res: Response) => {
     const { refreshToken } = req.cookies
-    const token = await userService.logout(refreshToken)
+    const token = await authService.logout(refreshToken)
 
     res.clearCookie('refreshToken')
     res.send(token)
@@ -43,7 +43,7 @@ class UserController {
 
   refresh = catchAsync(async (req: Request, res: Response) => {
     const { refreshToken } = req.cookies
-    const userData = await userService.refresh(refreshToken)
+    const userData = await authService.refresh(refreshToken)
 
     if (!userData) throw HttpError.UnauthorizedError()
 

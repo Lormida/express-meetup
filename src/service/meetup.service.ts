@@ -2,29 +2,23 @@ import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose'
 import MeetupModel, { MeetupDocument, MeetupInput } from '../model/meetup.model'
 
 class MeetupService {
-  async createMeetup(input: MeetupInput) {
+  createMeetup(input: MeetupInput) {
     return MeetupModel.create(input)
   }
 
-  async findMeetup(query: FilterQuery<MeetupDocument>, options: QueryOptions = { lean: true }) {
-    return MeetupModel.findOne(query, {}, options)
-  }
+  findMeetup = (query: FilterQuery<MeetupDocument>, options: QueryOptions = { lean: true }) =>
+    MeetupModel.findOne(query, {}, options)
 
-  async findAllMeetups(options: QueryOptions = { lean: true }) {
-    return MeetupModel.find({}, options)
-  }
+  /** Function is not using - instead of it is using HandlerFactory getAll */
+  findAllMeetups = (options: QueryOptions = { lean: true }) => MeetupModel.find({}, options)
 
-  async findAndUpdateMeetup(
+  findAndUpdateMeetup = (
     query: FilterQuery<MeetupDocument>,
     update: UpdateQuery<MeetupDocument>,
     options: QueryOptions
-  ) {
-    return MeetupModel.findOneAndUpdate(query, update, options)
-  }
+  ) => MeetupModel.findOneAndUpdate(query, update, options)
 
-  async findAndDeleteMeetup(query: FilterQuery<MeetupDocument>) {
-    return MeetupModel.findOneAndDelete(query)
-  }
+  findAndDeleteMeetup = (query: FilterQuery<MeetupDocument>) => MeetupModel.findOneAndDelete(query)
 }
 const meetupService = new MeetupService()
 

@@ -10,20 +10,16 @@ const ACCESS_TOKEN_EXPIRATION = config.get<string>('ACCESS_TOKEN_EXPIRATION')
 const REFRESH_TOKEN_EXPIRATION = config.get<string>('REFRESH_TOKEN_EXPIRATION')
 
 class SessionService {
-  generateTokens(payload: UserDto) {
-    const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, {
+  generateTokens = (payload: UserDto) => ({
+    accessToken: jwt.sign(payload, JWT_ACCESS_SECRET, {
       expiresIn: ACCESS_TOKEN_EXPIRATION,
-    })
-    const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
+    }),
+    refreshToken: jwt.sign(payload, JWT_REFRESH_SECRET, {
       expiresIn: REFRESH_TOKEN_EXPIRATION,
-    })
-    return {
-      accessToken,
-      refreshToken,
-    }
-  }
+    }),
+  })
 
-  validateAccessToken(token: string) {
+  validateAccessToken = (token: string) => {
     try {
       const userData = jwt.verify(token, JWT_ACCESS_SECRET)
       return userData
@@ -32,37 +28,28 @@ class SessionService {
     }
   }
 
-  validateRefreshToken(token: string) {
+  validateRefreshToken = (token: string) => {
     try {
       const userData = jwt.verify(token, JWT_REFRESH_SECRET)
-
       return userData
     } catch (e) {
       console.log('Refresh token is expired?')
-
       return null
     }
   }
 
-  async saveToken(userId: string, refreshToken: string) {
+  saveToken = async (userId: string, refreshToken: string) => {
     const tokenData = await sessionModel.findOne({ user: userId })
     if (tokenData) {
       tokenData.refreshToken = refreshToken
       return tokenData.save()
     }
-    const token = await sessionModel.create({ user: userId, refreshToken })
-    return token
+    return sessionModel.create({ user: userId, refreshToken })
   }
 
-  async removeToken(refreshToken: string) {
-    const tokenData = await sessionModel.deleteOne({ refreshToken })
-    return tokenData
-  }
+  removeToken = (refreshToken: string) => sessionModel.deleteOne({ refreshToken })
 
-  async findToken(refreshToken: string) {
-    const tokenData = await sessionModel.findOne({ refreshToken })
-    return tokenData
-  }
+  findToken = (refreshToken: string) => sessionModel.findOne({ refreshToken })
 }
 
 const sessionService = new SessionService()
