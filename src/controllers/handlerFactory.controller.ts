@@ -17,8 +17,8 @@ type TFuncPreMiddleware = (req: Request, res: Response) => Promise<unknown>
 export class HandlerFactory<T extends mongoose.Document> {
   constructor(public model: mongoose.Model<T>) {}
 
-  deleteOne(preMiddleware: TFuncPreMiddleware, getId: TFuncGetId) {
-    return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  deleteOne = (preMiddleware: TFuncPreMiddleware, getId: TFuncGetId) =>
+    catchAsync(async (req: Request, res: Response, next: NextFunction) => {
       await preMiddleware(req, res)
 
       const id = getId(req, res)
@@ -34,10 +34,9 @@ export class HandlerFactory<T extends mongoose.Document> {
         data: null,
       })
     })
-  }
 
-  createOne<TRequest extends Request>(executor: TFunc<object>) {
-    return catchAsync(async (req: TRequest, res: Response) => {
+  createOne = <TRequest extends Request>(executor: TFunc<object>) =>
+    catchAsync(async (req: TRequest, res: Response) => {
       const additionalData = executor(req, res)
       const newDoc = await this.model.create({ ...req.body, ...additionalData })
       res.send({
@@ -45,10 +44,9 @@ export class HandlerFactory<T extends mongoose.Document> {
         data: newDoc,
       })
     })
-  }
 
-  updateById(preMiddleware: TFuncPreMiddleware, getId: TFuncGetId) {
-    return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  updateById = (preMiddleware: TFuncPreMiddleware, getId: TFuncGetId) =>
+    catchAsync(async (req: Request, res: Response, next: NextFunction) => {
       await preMiddleware(req, res)
 
       const id = getId(req, res)
@@ -68,10 +66,9 @@ export class HandlerFactory<T extends mongoose.Document> {
         },
       })
     })
-  }
 
-  getById(getId: TFuncGetId, popOptions?: mongoose.PopulateOptions) {
-    return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  getById = (getId: TFuncGetId, popOptions?: mongoose.PopulateOptions) =>
+    catchAsync(async (req: Request, res: Response, next: NextFunction) => {
       const id = getId(req, res)
 
       let docQuery
@@ -89,10 +86,9 @@ export class HandlerFactory<T extends mongoose.Document> {
         data,
       })
     })
-  }
 
-  getAll(popOptions?: mongoose.PopulateOptions) {
-    return catchAsync(async (req: Request, res: Response) => {
+  getAll = (popOptions?: mongoose.PopulateOptions) =>
+    catchAsync(async (req: Request, res: Response) => {
       let features
       if (popOptions) {
         //@ts-expect-error fix later
@@ -114,5 +110,4 @@ export class HandlerFactory<T extends mongoose.Document> {
         docs,
       })
     })
-  }
 }
