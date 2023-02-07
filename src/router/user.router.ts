@@ -4,6 +4,6 @@ import { isAuth } from '../middleware/isAuth.middleware'
 
 const router = Router()
 
-router.get('/users', isAuth, userController.getUsers)
+router.get('/users', userController.getUsers)
 
 export { router as userRouter }

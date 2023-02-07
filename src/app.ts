@@ -23,7 +23,8 @@ app.use(cookieParser())
 app.use(
   cors({
     credentials: true,
-    origin: config.get<string>('CLIENT_URL'),
+    // origin: config.get<string>('CLIENT_URL'),
+    origin: '/',
   })
 )
 app.use(compression())

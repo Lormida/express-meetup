@@ -3,7 +3,7 @@ import connectDatabase from './utils/connectDatabase'
 import logger from './utils/logger'
 import app from './app'
 
-const PORT = config.get<number>('port')
+const PORT = config.get<number>('port') || 3000
 
 const server = app.listen(PORT, async () => {
   logger.info(`Server is running at port: ${PORT}...`)
