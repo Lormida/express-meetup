@@ -22,7 +22,7 @@ class MeetupService {
     return MeetupModel.findOneAndUpdate(query, update, options)
   }
 
-  async deleteMeetup(query: FilterQuery<MeetupDocument>) {
+  async findAndDeleteMeetup(query: FilterQuery<MeetupDocument>) {
     return MeetupModel.findOneAndDelete(query)
   }
 }

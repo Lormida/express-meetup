@@ -58,8 +58,6 @@ class UserService {
 
     const user = await UserModel.findById(userData.id)
 
-    console.log('user:', user)
-
     if (user) {
       return this.createSession(user)
     }

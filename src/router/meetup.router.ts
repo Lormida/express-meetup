@@ -21,6 +21,12 @@ router.post(
   [protectByRoles('ADMIN'), validateResource(createMeetupSchema)],
   meetupController.createMeetupByAdmin
 )
+router.patch(
+  '/meetup/:userId/:meetupId',
+  [protectByRoles('ADMIN'), validateResource(updateMeetupSchema)],
+  meetupController.updateMeetupByAdminById
+)
+
 router.delete(
   '/meetup/:userId/:meetupId',
   [protectByRoles('ADMIN'), validateResource(deleteMeetupSchema)],

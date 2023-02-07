@@ -7,8 +7,6 @@ import RoleModel from '../model/role.model'
 function registrationUser(role: 'USER' | 'ADMIN') {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log('role registration is', role)
-
       const { email, name, password } = req.body
 
       const userRole = await RoleModel.findOne({ value: role })

@@ -7,6 +7,7 @@ import { HandlerFactory } from './handlerFactory.controller'
 class MeetupController {
   getAllMeetups() {
     const handlerFactory = new HandlerFactory(Meetup)
+    // TODO: add populating options
     return handlerFactory.getAll()
   }
 
@@ -51,7 +52,7 @@ class MeetupController {
     const meetupId = req.params.meetupId
     const update = req.body
 
-    const meetup = await meetupService.findMeetup({ _id: meetupId })
+    const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
     if (!meetup) {
       return res.sendStatus(404)
@@ -61,9 +62,29 @@ class MeetupController {
       return res.sendStatus(403)
     }
 
-    const updatedMeetup = await meetupService.findAndUpdateMeetup({ _id: meetupId }, update, {
-      new: true,
-    })
+    const updatedMeetup = await meetupService.findAndUpdateMeetup(
+      { $and: [{ _id: meetupId }, { host: userId }] },
+      update,
+      {
+        new: true,
+      }
+    )
+
+    return res.send(updatedMeetup)
+  }
+  async updateMeetupByAdminById(req: Request<UpdateMeetupInput['params']>, res: Response) {
+    //@ts-expect-error fix later
+    const userId = req.params.userId
+    const meetupId = req.params.meetupId
+    const update = req.body
+
+    const updatedMeetup = await meetupService.findAndUpdateMeetup(
+      { $and: [{ _id: meetupId }, { host: userId }] },
+      update,
+      {
+        new: true,
+      }
+    )
 
     return res.send(updatedMeetup)
   }
@@ -81,7 +102,7 @@ class MeetupController {
       return res.sendStatus(403)
     }
 
-    await meetupService.deleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+    await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
     return res.sendStatus(200)
   }
@@ -92,8 +113,7 @@ class MeetupController {
     const userId = req.params.userId
     const meetupId = req.params.meetupId
 
-    const meetup = await meetupService.deleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
-    console.log('was deleted', meetup)
+    const meetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
     return res.sendStatus(200)
   }

@@ -4,6 +4,7 @@ interface TQueryObject {
   fields?: string
   page?: string
   limit?: string
+  partialSearch: string
 }
 
 export class APIFeatures<T> {
@@ -23,10 +24,12 @@ export class APIFeatures<T> {
 
     const queryStrParsed = JSON.parse(queryStr)
 
-    // Partal string search
-    Object.keys(queryStrParsed).forEach((key) => {
-      queryStrParsed[key] = { $regex: queryStrParsed[key] }
-    })
+    if (queryObj.partialSearch && JSON.parse(queryObj.partialSearch)) {
+      // Partal string search
+      Object.keys(queryStrParsed).forEach((key) => {
+        queryStrParsed[key] = { $regex: queryStrParsed[key] }
+      })
+    }
 
     this.query = this.query.find(queryStrParsed)
 
