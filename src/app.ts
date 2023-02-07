@@ -8,6 +8,7 @@ import config from 'config'
 import { errorMiddleware } from './middleware/error.middleware'
 import { userRouter } from './router/user.router'
 import deserializeUser from './middleware/deserializeUser.middleware'
+import { authRouter } from './router/auth.routes'
 
 // import("helmet")
 // import cookieParser from 'cookie-parser'
@@ -27,7 +28,8 @@ app.use(
 )
 app.use(compression())
 app.use('/api', meetupRouter)
-app.use('/', userRouter)
+app.use('/api', userRouter)
+app.use('/auth', authRouter)
 
 // Handle production
 if (process.env.NODE_ENV === 'production') {
