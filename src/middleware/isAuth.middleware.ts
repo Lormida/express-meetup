@@ -22,8 +22,10 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
     if (!userData) {
       return next(HttpError.UnauthorizedError())
     }
+
     next()
-  } catch (e) {
-    return next(HttpError.UnauthorizedError())
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    next(HttpError.BadRequestError(e.message))
   }
 }

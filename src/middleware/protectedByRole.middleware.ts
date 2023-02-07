@@ -4,24 +4,23 @@ import { elementIsIncluded, extractRoles } from '../utils/helpers'
 import HttpError from '../utils/HttpError'
 
 export const protectByRoles = (...protectedRoles: any[]) => {
-  return catchAsync(function (req: Request, res: Response, next: NextFunction) {
-    return new Promise((resolve, reject) => {
-      //@ts-expect-error fix later
-      const { roles } = res.locals.user
+  return catchAsync(async function (req: Request, res: Response, next: NextFunction) {
+    //@ts-expect-error fix later
+    const { roles } = res.locals.user
 
-      const _roles = extractRoles(roles)
+    const _roles = extractRoles(roles)
 
-      if (!_roles || !elementIsIncluded(protectedRoles, _roles)) {
-        return reject(
-          new HttpError(
-            405,
-            `Error role (${_roles.join(',')}), but require (${protectedRoles.join(
-              ','
-            )}).You don't have permission to given operation!`
-          )
+    if (!_roles || !elementIsIncluded(protectedRoles, _roles)) {
+      next(
+        new HttpError(
+          405,
+          `Error role (${_roles.join(',')}), but require (${protectedRoles.join(
+            ','
+          )}).You don't have permission to given operation!`
         )
-      }
-      resolve(next())
-    })
+      )
+    }
+
+    next()
   })
 }
