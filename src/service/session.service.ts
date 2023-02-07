@@ -40,10 +40,12 @@ class SessionService {
 
   saveToken = async (userId: string, refreshToken: string) => {
     const tokenData = await sessionModel.findOne({ user: userId })
+
     if (tokenData) {
       tokenData.refreshToken = refreshToken
       return tokenData.save()
     }
+
     return sessionModel.create({ user: userId, refreshToken })
   }
 

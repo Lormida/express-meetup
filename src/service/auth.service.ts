@@ -16,7 +16,9 @@ class AuthService {
   registration = async (email: string, name: string, password: string, roles: string[]) => {
     const candidate = await UserModel.findOne({ email })
 
-    if (candidate) throw HttpError.BadRequestError(`User with ${email} already exists`)
+    if (candidate) {
+      throw HttpError.BadRequestError(`User with ${email} already exists`)
+    }
 
     const user = await UserModel.create({ email, name, password, roles })
 
@@ -26,28 +28,38 @@ class AuthService {
   login = async (email: string, password: string) => {
     const user = await UserModel.findOne({ email })
 
-    if (!user) throw HttpError.BadRequestError('User with such email is not found')
+    if (!user) {
+      throw HttpError.BadRequestError('User with such email is not found')
+    }
 
     const isPasswordsEqual = await user.comparePassword(password)
 
-    if (!isPasswordsEqual) throw HttpError.BadRequestError('Wrong password')
+    if (!isPasswordsEqual) {
+      throw HttpError.BadRequestError('Wrong password')
+    }
 
     return this.createSession(user)
   }
 
   refresh = async (refreshToken: string) => {
-    if (!refreshToken) throw HttpError.UnauthorizedError()
+    if (!refreshToken) {
+      throw HttpError.UnauthorizedError()
+    }
 
     const userData = sessionService.validateRefreshToken(refreshToken) as {
       id: string
     }
     const tokenFromDb = await sessionService.findToken(refreshToken)
 
-    if (!userData?.id || !tokenFromDb) throw HttpError.UnauthorizedError()
+    if (!userData?.id || !tokenFromDb) {
+      throw HttpError.UnauthorizedError()
+    }
 
     const user = await UserModel.findById(userData.id)
 
-    if (user) return this.createSession(user)
+    if (user) {
+      return this.createSession(user)
+    }
 
     // TODO: fix it
     return null

@@ -3,8 +3,8 @@ import { catchAsync } from '../utils/catchAsync'
 import { elementIsIncluded, extractRoles } from '../utils/helpers'
 import HttpError from '../utils/HttpError'
 
-export const protectByRoles = (...protectedRoles: any[]) => {
-  return catchAsync(async function (req: Request, res: Response, next: NextFunction) {
+export const protectByRoles = (...protectedRoles: any[]) =>
+  catchAsync(async function (req: Request, res: Response, next: NextFunction) {
     //@ts-expect-error fix later
     const { roles } = res.locals.user
 
@@ -23,4 +23,3 @@ export const protectByRoles = (...protectedRoles: any[]) => {
 
     next()
   })
-}

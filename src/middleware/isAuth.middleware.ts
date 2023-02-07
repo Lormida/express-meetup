@@ -7,17 +7,23 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
     const authorizationHeader = req.headers.authorization
 
-    if (!authorizationHeader) return next(HttpError.UnauthorizedError())
+    if (!authorizationHeader) {
+      return next(HttpError.UnauthorizedError())
+    }
 
     const accessToken = authorizationHeader.split(' ')[1]
 
-    if (!accessToken) return next(HttpError.UnauthorizedError())
+    if (!accessToken) {
+      return next(HttpError.UnauthorizedError())
+    }
 
     const userData = sessionService.validateAccessToken(accessToken)
 
-    if (!userData) return next(HttpError.UnauthorizedError())
+    if (!userData) {
+      return next(HttpError.UnauthorizedError())
+    }
 
-    next()
+    return next()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     next(HttpError.BadRequestError(e.message))

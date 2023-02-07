@@ -72,6 +72,7 @@ export class HandlerFactory<T extends mongoose.Document> {
       const id = getId(req, res)
 
       let docQuery
+
       if (popOptions) {
         docQuery = this.model.findById(id).populate(popOptions)
       } else {
@@ -79,7 +80,10 @@ export class HandlerFactory<T extends mongoose.Document> {
       }
 
       const data = await docQuery
-      if (!data) return next(HttpError.NotFoundError('No doc found with that ID'))
+
+      if (!data) {
+        return next(HttpError.NotFoundError('No doc found with that ID'))
+      }
 
       res.status(200).send({
         status: 'success',
@@ -90,6 +94,7 @@ export class HandlerFactory<T extends mongoose.Document> {
   getAll = (popOptions?: mongoose.PopulateOptions) =>
     catchAsync(async (req: Request, res: Response) => {
       let features
+
       if (popOptions) {
         //@ts-expect-error fix later
         features = new APIFeatures(this.model.find({}).populate(popOptions), req.query)

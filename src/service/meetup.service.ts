@@ -2,9 +2,7 @@ import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose'
 import MeetupModel, { MeetupDocument, MeetupInput } from '../model/meetup.model'
 
 class MeetupService {
-  createMeetup(input: MeetupInput) {
-    return MeetupModel.create(input)
-  }
+  createMeetup = (input: MeetupInput) => MeetupModel.create(input)
 
   findMeetup = (query: FilterQuery<MeetupDocument>, options: QueryOptions = { lean: true }) =>
     MeetupModel.findOne(query, {}, options)

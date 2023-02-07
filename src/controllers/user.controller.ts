@@ -5,7 +5,7 @@ import { catchAsync } from '../utils/catchAsync'
 class UserController {
   getUsers = catchAsync(async (req: Request, res: Response) => {
     const users = await userService.findAllUsers()
-    return res.send(users)
+    res.send(users)
   })
 }
 

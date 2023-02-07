@@ -16,7 +16,9 @@ class MeetupController {
     const { meetupId } = req.params
     const meetup = await meetupService.findMeetup({ _id: meetupId })
 
-    if (!meetup) return res.sendStatus(404)
+    if (!meetup) {
+      return res.sendStatus(404)
+    }
 
     return res.send(meetup)
   })
@@ -54,8 +56,13 @@ class MeetupController {
 
     const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
-    if (!meetup) return res.sendStatus(404)
-    if (String(meetup.host) !== userId) return res.sendStatus(403)
+    if (!meetup) {
+      return res.sendStatus(404)
+    }
+
+    if (String(meetup.host) !== userId) {
+      return res.sendStatus(403)
+    }
 
     const updatedMeetup = await meetupService.findAndUpdateMeetup(
       { $and: [{ _id: meetupId }, { host: userId }] },
@@ -65,7 +72,7 @@ class MeetupController {
       }
     )
 
-    return res.send(updatedMeetup)
+    res.send(updatedMeetup)
   })
 
   updateMeetupByAdminById = catchAsync(async (req: Request<UpdateMeetupInput['params']>, res: Response) => {
@@ -81,7 +88,7 @@ class MeetupController {
       }
     )
 
-    return res.send(updatedMeetup)
+    res.send(updatedMeetup)
   })
 
   deleteMeetupById = catchAsync(async (req: Request<UpdateMeetupInput['params']>, res: Response) => {
@@ -90,12 +97,17 @@ class MeetupController {
 
     const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
-    if (!meetup) return res.sendStatus(404)
-    if (String(meetup.host) !== userId) return res.sendStatus(403)
+    if (!meetup) {
+      return res.sendStatus(404)
+    }
+
+    if (String(meetup.host) !== userId) {
+      return res.sendStatus(403)
+    }
 
     const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
-    return res.status(200).json({
+    res.status(200).json({
       status: 'success',
       data: removedMeetup,
     })
@@ -107,7 +119,7 @@ class MeetupController {
 
     const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
-    return res.status(200).json({
+    res.status(200).json({
       status: 'success',
       data: removedMeetup,
     })
