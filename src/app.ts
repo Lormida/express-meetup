@@ -4,26 +4,22 @@ import compression from 'compression'
 import HttpError from './utils/HttpError'
 import { meetupRouter } from './router/meetup.router'
 import cookieParser from 'cookie-parser'
-import config from 'config'
 import { errorMiddleware } from './middleware/error.middleware'
 import { userRouter } from './router/user.router'
 import deserializeUser from './middleware/deserializeUser.middleware'
 import { authRouter } from './router/auth.routes'
-
-// import("helmet")
-// import cookieParser from 'cookie-parser'
-// import helmet from 'helmet'
+//@ts-expect-error bug with common.js module
+import helmet from 'helmet'
 
 const app = express()
 app.use(express.json())
 app.use(deserializeUser)
 
 app.use(cookieParser())
-// app.use(helmet())
+app.use(helmet())
 app.use(
   cors({
     credentials: true,
-    // origin: config.get<string>('CLIENT_URL'),
     origin: '/',
   })
 )
