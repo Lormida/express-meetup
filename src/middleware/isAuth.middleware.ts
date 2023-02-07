@@ -3,7 +3,7 @@ import { Response, Request, NextFunction } from 'express'
 import sessionService from '../service/session.service'
 import HttpError from '../utils/HttpError'
 
-export const isAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
     const authorizationHeader = req.headers.authorization
 

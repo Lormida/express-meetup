@@ -1,28 +1,25 @@
 import { Router } from 'express'
 import { meetupController } from '../controllers/meetup.controller'
-import { isAuthMiddleware } from '../middleware/isAuth.middleware'
+import { isAuth } from '../middleware/isAuth.middleware'
+import { protectByRoles } from '../middleware/protectedByRole.middleware'
 import validateResource from '../middleware/validateResource.middleware'
 import { createMeetupSchema, deleteMeetupSchema, getMeetupSchema, updateMeetupSchema } from '../schema/meetup.schema'
 const router = Router()
 
-// router.use(authController.isAuth)
+router.use(isAuth)
 
-router.get('/meetups', isAuthMiddleware, meetupController.getAllMeetups())
+router.get('/meetups', meetupController.getAllMeetups())
+router.get('/meetup/:meetupId', [validateResource(getMeetupSchema)], meetupController.getMeetupById)
 
-router.get('/meetup/:meetupId', [isAuthMiddleware, validateResource(getMeetupSchema)], meetupController.getMeetupById)
+router.post('/create-meetup', [validateResource(createMeetupSchema)], meetupController.createMeetup)
+router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetupController.updateMeetupById)
+router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetupController.deleteMeetupById)
 
-router.post('/create-meetup', [isAuthMiddleware, validateResource(createMeetupSchema)], meetupController.createMeetup)
-
-router.put(
-  '/meetup/:meetupId',
-  [isAuthMiddleware, validateResource(updateMeetupSchema)],
-  meetupController.updateMeetupById
-)
-
-router.delete(
-  '/meetup/:meetupId',
-  [isAuthMiddleware, validateResource(deleteMeetupSchema)],
-  meetupController.deleteMeetupById
+// Admin
+router.post(
+  '/create-meetup/:userId',
+  [protectByRoles('ADMIN'), validateResource(createMeetupSchema)],
+  meetupController.createMeetupByAdmin
 )
 
 export { router as meetupRouter }

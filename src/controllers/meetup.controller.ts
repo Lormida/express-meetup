@@ -22,7 +22,20 @@ class MeetupController {
   }
   async createMeetup(req: Request<{}, {}, CreateMeetupInput['body']>, res: Response) {
     const userId = res.locals.user.id
+    const body = req.body
 
+    const newMeetup = await meetupService.createMeetup({
+      ...body,
+      host: userId,
+    })
+
+    return res.send(newMeetup)
+  }
+
+  //TODO: fix req type
+  async createMeetupByAdmin(req: Request<{}, {}, CreateMeetupInput['body']>, res: Response) {
+    //@ts-expect-error fix later
+    const userId = req.params.userId
     const body = req.body
 
     const newMeetup = await meetupService.createMeetup({

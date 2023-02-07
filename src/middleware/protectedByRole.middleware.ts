@@ -1,10 +1,7 @@
 import { NextFunction } from 'express'
 import { catchAsync } from '../utils/catchAsync'
+import { elementIsIncluded, extractRoles } from '../utils/helpers'
 import HttpError from '../utils/HttpError'
-
-function elementIsIncluded(mainArray: unknown[], secondArray: unknown[]): boolean {
-  return mainArray.some((element) => secondArray.includes(element))
-}
 
 export const protectByRoles = (...protectedRoles: any[]) => {
   return catchAsync(function (req: Request, res: Response, next: NextFunction) {
@@ -12,7 +9,7 @@ export const protectByRoles = (...protectedRoles: any[]) => {
       //@ts-expect-error fix later
       const { roles } = res.locals.user
 
-      const _roles = roles.map((el: { value: string }) => el.value)
+      const _roles = extractRoles(roles)
 
       if (!_roles || !elementIsIncluded(protectedRoles, _roles)) {
         return reject(
