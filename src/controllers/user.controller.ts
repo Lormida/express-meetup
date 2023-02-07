@@ -1,15 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import userService from '../service/user.service'
+import { catchAsync } from '../utils/catchAsync'
 
 class UserController {
-  async getUsers(req: Request, res: Response, next: NextFunction) {
-    try {
-      const users = await userService.findAllUsers()
-      return res.send(users)
-    } catch (e) {
-      next(e)
-    }
-  }
+  getUsers = catchAsync(async (req: Request, res: Response) => {
+    const users = await userService.findAllUsers()
+    return res.send(users)
+  })
 }
 
 const userController = new UserController()
