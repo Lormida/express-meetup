@@ -28,9 +28,9 @@ app.use(
   })
 )
 app.use(compression())
-app.use('/api', meetupRouter)
-app.use('/api', userRouter)
 app.use('/auth', authRouter)
+app.use('/api', userRouter)
+app.use('/api', meetupRouter)
 
 // Handle production
 if (process.env.NODE_ENV === 'production') {
