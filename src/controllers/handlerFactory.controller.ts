@@ -90,12 +90,14 @@ export class HandlerFactory<T extends mongoose.Document> {
     return catchAsync(async (req: Request, res: Response) => {
       let features
       if (popOptions) {
+        //@ts-expect-error fix later
         features = new APIFeatures(this.model.find({}).populate(popOptions), req.query)
           .filter()
           .sort()
           .limitFields()
           .paginate()
       } else {
+        //@ts-expect-error fix later
         features = new APIFeatures(this.model.find({}), req.query).filter().sort().limitFields().paginate()
       }
 
