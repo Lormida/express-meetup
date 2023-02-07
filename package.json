@@ -6,7 +6,7 @@
   "scripts": {
     "build": "yarn install && tsc",
     "start": "tsc ./src/server.ts",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
+    "dev": "nodemon --transpile-only --watch ./src/server.ts",
     "lint": "eslint src/**/*.ts",
     "lintfix": "prettier --write --list-different . && yarn lint --fix"
   },
