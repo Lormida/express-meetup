@@ -21,5 +21,10 @@ router.post(
   [protectByRoles('ADMIN'), validateResource(createMeetupSchema)],
   meetupController.createMeetupByAdmin
 )
+router.delete(
+  '/meetup/:userId/:meetupId',
+  [protectByRoles('ADMIN'), validateResource(deleteMeetupSchema)],
+  meetupController.deleteMeetupByAdminById
+)
 
 export { router as meetupRouter }

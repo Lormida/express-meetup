@@ -23,7 +23,7 @@ class MeetupService {
   }
 
   async deleteMeetup(query: FilterQuery<MeetupDocument>) {
-    return MeetupModel.deleteOne(query)
+    return MeetupModel.findOneAndDelete(query)
   }
 }
 const meetupService = new MeetupService()

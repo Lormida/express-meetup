@@ -71,7 +71,7 @@ class MeetupController {
     const userId = res.locals.user.id
     const meetupId = req.params.meetupId
 
-    const meetup = await meetupService.findMeetup({ _id: meetupId })
+    const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
     if (!meetup) {
       return res.sendStatus(404)
@@ -81,7 +81,19 @@ class MeetupController {
       return res.sendStatus(403)
     }
 
-    await meetupService.deleteMeetup({ id: meetupId })
+    await meetupService.deleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+
+    return res.sendStatus(200)
+  }
+
+  // TODO: fix req type
+  async deleteMeetupByAdminById(req: Request<UpdateMeetupInput['params']>, res: Response) {
+    //@ts-expect-error fix later
+    const userId = req.params.userId
+    const meetupId = req.params.meetupId
+
+    const meetup = await meetupService.deleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+    console.log('was deleted', meetup)
 
     return res.sendStatus(200)
   }
