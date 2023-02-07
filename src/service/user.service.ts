@@ -17,7 +17,7 @@ class UserService {
   async registration(email: string, name: string, password: string, roles: string[]) {
     const candidate = await UserModel.findOne({ email })
     if (candidate) {
-      throw HttpError.BadRequest(`User with ${email} already exists`)
+      throw HttpError.BadRequestError(`User with ${email} already exists`)
     }
 
     const user = await UserModel.create({ email, name, password, roles })
@@ -28,12 +28,12 @@ class UserService {
   async login(email: string, password: string) {
     const user = await UserModel.findOne({ email })
     if (!user) {
-      throw HttpError.BadRequest('User with such email is not found')
+      throw HttpError.BadRequestError('User with such email is not found')
     }
 
     const isPasswordsEqual = await user.comparePassword(password)
     if (!isPasswordsEqual) {
-      throw HttpError.BadRequest('Wrong password')
+      throw HttpError.BadRequestError('Wrong password')
     }
     return this.createSession(user)
   }

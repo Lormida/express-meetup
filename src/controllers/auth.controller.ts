@@ -10,7 +10,7 @@ function registrationUser(role: 'USER' | 'ADMIN') {
 
       const userRole = await RoleModel.findOne({ value: role })
 
-      if (!userRole) throw HttpError.BadRequest('User role not found')
+      if (!userRole) throw HttpError.BadRequestError('User role not found')
 
       const userData = await userService.registration(email, name, password, [userRole._id])
       res.cookie('refreshToken', userData.refreshToken, {

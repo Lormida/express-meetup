@@ -21,7 +21,7 @@ export class HandlerFactory<T extends mongoose.Document> {
       const doc = await this.model.findByIdAndDelete(id)
 
       if (!doc) {
-        return next(new HttpError(404, 'No doc found with that ID'))
+        return next(HttpError.NotFoundError('No doc found with that ID'))
       }
 
       res.status(204).send({
@@ -53,7 +53,7 @@ export class HandlerFactory<T extends mongoose.Document> {
       })
 
       if (!doc) {
-        return next(new HttpError(404, 'No doc found with that ID'))
+        return next(HttpError.NotFoundError('No doc found with that ID'))
       }
 
       res.status(200).send({
@@ -77,7 +77,7 @@ export class HandlerFactory<T extends mongoose.Document> {
       }
 
       const data = await docQuery
-      if (!data) return next(new HttpError(404, 'No doc found with that ID'))
+      if (!data) return next(HttpError.NotFoundError('No doc found with that ID'))
 
       res.status(200).send({
         status: 'success',

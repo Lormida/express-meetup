@@ -10,10 +10,14 @@ export default class HttpError extends Error {
   }
 
   static UnauthorizedError() {
-    return new HttpError(401, 'Пользователь не авторизован')
+    return new HttpError(401, 'User is not authorized')
   }
 
-  static BadRequest(message: string, errors = []) {
+  static NotFoundError(message: string) {
+    return new HttpError(404, message)
+  }
+
+  static BadRequestError(message: string, errors = []) {
     return new HttpError(400, message, errors)
   }
 }
