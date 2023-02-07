@@ -1,8 +1,9 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import Meetup from '../model/meetup.model'
 import { CreateMeetupInput, GetMeetupInput, UpdateMeetupInput } from '../schema/meetup.schema'
 import meetupService from '../service/meetup.service'
 import { catchAsync } from '../utils/catchAsync'
+import HttpError from '../utils/HttpError'
 import { HandlerFactory } from './handlerFactory.controller'
 
 class MeetupController {
@@ -12,12 +13,12 @@ class MeetupController {
     return handlerFactory.getAll()
   }
 
-  getMeetupById = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response) => {
+  getMeetupById = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response, next: NextFunction) => {
     const { meetupId } = req.params
     const meetup = await meetupService.findMeetup({ _id: meetupId })
 
     if (!meetup) {
-      return res.sendStatus(404)
+      return next(HttpError.NotFoundError('meetup is not found!'))
     }
 
     return res.send(meetup)
@@ -49,78 +50,90 @@ class MeetupController {
     return res.send(newMeetup)
   })
 
-  updateMeetupById = catchAsync(async (req: Request<UpdateMeetupInput['params']>, res: Response) => {
-    const userId = res.locals.user.id
-    const { meetupId } = req.params
-    const update = req.body
+  updateMeetupById = catchAsync(
+    async (req: Request<UpdateMeetupInput['params']>, res: Response, next: NextFunction) => {
+      const userId = res.locals.user.id
+      const { meetupId } = req.params
+      const update = req.body
 
-    const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+      const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
-    if (!meetup) {
-      return res.sendStatus(404)
-    }
-
-    if (String(meetup.host) !== userId) {
-      return res.sendStatus(403)
-    }
-
-    const updatedMeetup = await meetupService.findAndUpdateMeetup(
-      { $and: [{ _id: meetupId }, { host: userId }] },
-      update,
-      {
-        new: true,
+      if (!meetup) {
+        return next(HttpError.NotFoundError('meetup is not found!'))
       }
-    )
 
-    res.send(updatedMeetup)
-  })
-
-  updateMeetupByAdminById = catchAsync(async (req: Request<UpdateMeetupInput['params']>, res: Response) => {
-    //@ts-expect-error fix later
-    const { userId, meetupId } = req.params
-    const update = req.body
-
-    const updatedMeetup = await meetupService.findAndUpdateMeetup(
-      { $and: [{ _id: meetupId }, { host: userId }] },
-      update,
-      {
-        new: true,
+      if (String(meetup.host) !== userId) {
+        return next(HttpError.NoPermissionError())
       }
-    )
 
-    res.send(updatedMeetup)
-  })
+      const updatedMeetup = await meetupService.findAndUpdateMeetup(
+        { $and: [{ _id: meetupId }, { host: userId }] },
+        update,
+        {
+          new: true,
+        }
+      )
 
-  deleteMeetupById = catchAsync(async (req: Request<UpdateMeetupInput['params']>, res: Response) => {
-    const userId = res.locals.user.id
-    const { meetupId } = req.params
-
-    const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
-
-    if (!meetup) {
-      return res.sendStatus(404)
+      res.send(updatedMeetup)
     }
+  )
 
-    if (String(meetup.host) !== userId) {
-      return res.sendStatus(403)
+  updateMeetupByAdminById = catchAsync(
+    async (req: Request<UpdateMeetupInput['params']>, res: Response, next: NextFunction) => {
+      //@ts-expect-error fix later
+      const { userId, meetupId } = req.params
+      const update = req.body
+
+      const updatedMeetup = await meetupService.findAndUpdateMeetup(
+        { $and: [{ _id: meetupId }, { host: userId }] },
+        update,
+        {
+          new: true,
+        }
+      )
+
+      if (!updatedMeetup) {
+        return next(HttpError.NotFoundError('meetup is not found!'))
+      }
+
+      res.send(updatedMeetup)
     }
+  )
 
-    const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+  deleteMeetupById = catchAsync(
+    async (req: Request<UpdateMeetupInput['params']>, res: Response, next: NextFunction) => {
+      const userId = res.locals.user.id
+      const { meetupId } = req.params
 
-    res.status(200).json({
-      status: 'success',
-      data: removedMeetup,
-    })
-  })
+      const meetup = await meetupService.findMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+
+      if (!meetup) {
+        return next(HttpError.NotFoundError('meetup is not found!'))
+      }
+
+      if (String(meetup.host) !== userId) {
+        return next(HttpError.NoPermissionError())
+      }
+
+      const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+      const status = removedMeetup ? 'success' : 'failure'
+
+      res.status(200).json({
+        status,
+        data: removedMeetup,
+      })
+    }
+  )
 
   deleteMeetupByAdminById = catchAsync(async (req: Request<UpdateMeetupInput['params']>, res: Response) => {
     //@ts-expect-error fix later
     const { userId, meetupId } = req.params
 
     const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
+    const status = removedMeetup ? 'success' : 'failure'
 
     res.status(200).json({
-      status: 'success',
+      status,
       data: removedMeetup,
     })
   })

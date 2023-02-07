@@ -39,8 +39,11 @@ export class HandlerFactory<T extends mongoose.Document> {
     catchAsync(async (req: TRequest, res: Response) => {
       const additionalData = executor(req, res)
       const newDoc = await this.model.create({ ...req.body, ...additionalData })
+
+      const status = newDoc ? 'success' : 'failure'
+
       res.send({
-        status: 'success',
+        status,
         data: newDoc,
       })
     })

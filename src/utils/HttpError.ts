@@ -8,16 +8,19 @@ export default class HttpError extends Error {
     this.statusCode = statusCode
     this.errors = errors
   }
+  static BadRequestError(message: string, errors = []) {
+    return new HttpError(400, message, errors)
+  }
 
   static UnauthorizedError() {
     return new HttpError(401, 'User is not authorized')
   }
 
-  static NotFoundError(message: string) {
-    return new HttpError(404, message)
+  static NoPermissionError() {
+    return new HttpError(403, `User does't have permission`)
   }
 
-  static BadRequestError(message: string, errors = []) {
-    return new HttpError(400, message, errors)
+  static NotFoundError(message: string) {
+    return new HttpError(404, message)
   }
 }
