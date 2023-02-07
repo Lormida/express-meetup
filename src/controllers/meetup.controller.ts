@@ -21,8 +21,6 @@ class MeetupController {
     return res.send(meetup)
   }
   async createMeetup(req: Request<{}, {}, CreateMeetupInput['body']>, res: Response) {
-    console.log(res.locals)
-    // TODO :FIx resl
     const userId = res.locals.user.id
 
     const body = req.body

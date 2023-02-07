@@ -3,12 +3,15 @@ import userService from '../service/user.service'
 import HttpError from '../utils/HttpError'
 import RoleModel from '../model/role.model'
 
-class UserController {
-  async registration(req: Request, res: Response, next: NextFunction) {
+//TODO: fix types later
+function registrationUser(role: 'USER' | 'ADMIN') {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log('role registration is', role)
+
       const { email, name, password } = req.body
 
-      const userRole = await RoleModel.findOne({ value: 'USER' })
+      const userRole = await RoleModel.findOne({ value: role })
 
       if (!userRole) throw HttpError.BadRequest('User role not found')
 
@@ -21,6 +24,12 @@ class UserController {
     } catch (e) {
       next(e)
     }
+  }
+}
+
+class UserController {
+  registration(role: 'USER' | 'ADMIN') {
+    return registrationUser(role)
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
