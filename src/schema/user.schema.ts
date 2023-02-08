@@ -8,11 +8,15 @@ import { array, object, string, TypeOf, z } from 'zod'
  *       type: array
  *       items:
  *         $ref: '#/components/schema/User'
+ *
  *     User:
  *       type: object
  *       required:
  *        - email
  *        - name
+ *        - roles
+ *        - createdAt
+ *        - updatedAt
  *       properties:
  *         email:
  *           type: string
@@ -21,17 +25,29 @@ import { array, object, string, TypeOf, z } from 'zod'
  *         roles:
  *           type: array
  *           items:
- *             type: string
- *             enum:
- *               - ADMIN
- *               - USER
+ *             type: object
+ *             properties:
+ *               value:
+ *                 type: string
+ *                 enum:
+ *                   - ADMIN
+ *                   - USER
+ *         createdAt:
+ *           type: string
+ *         updatedAt:
+ *           type: string
  */
 const payload = {
   body: object({
     email: string({
-      required_error: 'Email is required field',
+      required_error: 'Email is required',
     }).email({ message: 'Invalid email address' }),
-    name: string({})
+    name: string({
+      required_error: 'Name is required',
+    }),
+    password: string({
+      required_error: 'Password is required',
+    })
       .min(6, 'Password should be at least 6 characters long')
       .max(20, 'Password should be less than 20 characters long'),
   }),
