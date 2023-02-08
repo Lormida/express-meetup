@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import Meetup from '../model/meetup.model'
-import { CreateMeetupInput, GetMeetupInput, UpdateMeetupInput } from '../schema/meetup.schema'
+import { CreateMeetupInput, GetMeetupInput, UpdateMeetupInput } from '../schema/meetup/meetup.schema'
 import meetupService from '../service/meetup.service'
 import { catchAsync } from '../utils/catchAsync'
 import HttpError from '../utils/HttpError'

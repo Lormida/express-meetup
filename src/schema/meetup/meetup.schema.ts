@@ -1,4 +1,4 @@
-import { object, string, array, TypeOf } from 'zod'
+import { object, string, array, TypeOf, date, z } from 'zod'
 
 const payload = {
   body: object({
@@ -15,9 +15,16 @@ const payload = {
         required_error: 'A meetup must have tags',
       })
     ).min(2),
+    place: string().optional(),
+    time: string({
+      required_error: 'Meetup must have a time',
+    }).datetime({
+      message: "It's not a date",
+    }),
   }),
 }
 
+// For patch request
 const payloadOptional = {
   body: object({
     name: string({
@@ -37,6 +44,14 @@ const payloadOptional = {
       })
     )
       .min(2)
+      .optional(),
+    place: string().optional(),
+    time: string({
+      required_error: 'Meetup must have a time',
+    })
+      .datetime({
+        message: "It's not a date",
+      })
       .optional(),
   }),
 }

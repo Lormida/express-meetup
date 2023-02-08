@@ -1,0 +1,34 @@
+components:
+  schema:
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schema/User"
+
+    User:
+      type: object
+      required:
+        - email
+        - name
+        - roles
+        - createdAt
+        - updatedAt
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+                enum:
+                  - ADMIN
+                  - USER
+        createdAt:
+          type: string
+        updatedAt:
+          type: string

@@ -2,8 +2,8 @@ import { Router } from 'express'
 import authController from '../controllers/auth.controller'
 import validateResource from '../middleware/validateResource.middleware'
 import { isAuth } from '../middleware/isAuth.middleware'
-import { createUserSchema } from '../schema/user.schema'
-import { loginUserSchema } from '../schema/login.schema'
+import { createUserSchema } from '../schema/user/user.schema'
+import { loginUserSchema } from '../schema/auth/login.schema'
 import { protectByRoles } from '../middleware/protectedByRole.middleware'
 const router = Router()
 

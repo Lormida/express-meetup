@@ -27,6 +27,15 @@ const meetupSchema = new Schema(
       type: [String],
       required: true,
     },
+    place: {
+      type: String,
+      required: true,
+      default: 'Minsk',
+    },
+    time: {
+      type: Date,
+      required: true,
+    },
     host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -37,10 +46,6 @@ const meetupSchema = new Schema(
     timestamps: true,
   }
 )
-
-/* meetupSchema.virtual('slug').get(function () {
-  return this.name.split(' ').map(el => el.toLowerCase()).join('-');
-}); */
 
 meetupSchema.index({ name: 1 })
 
