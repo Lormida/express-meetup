@@ -8,14 +8,36 @@ import HttpError from '../utils/HttpError'
 import { HandlerFactory } from './handlerFactory.controller'
 
 class MeetupController {
-  getAllMeetups = () => {
+  getAllMeetups = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response) => {
     const handlerFactory = new HandlerFactory(Meetup)
 
-    const converterToDTO = (meetups: MeetupDocument[]) => meetups.map((m) => new MeetupDTO(m))
+    const converterToDTO = (meetups: MeetupDocument[]) => meetups.map((m) => m && new MeetupDTO(m))
     // TODO: add populating options
 
-    return handlerFactory.getAll(converterToDTO)
-  }
+    const data = await handlerFactory.getAll<MeetupDocument | null>(req.query)
+
+    return res.send({
+      length: data?.length || 0,
+      data: data?.length && converterToDTO(data as MeetupDocument[]),
+    })
+  })
+
+  //TODO: fix type
+  getMeetupsByAdmin = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response) => {
+    const handlerFactory = new HandlerFactory(Meetup)
+    //@ts-expect-error fix later
+    const { userId } = req.params
+
+    const converterToDTO = (meetups: MeetupDocument[]) => meetups.map((m) => m && new MeetupDTO(m))
+    // TODO: add populating options
+
+    const data = await handlerFactory.getAll<MeetupDocument | null>(req.query, { host: userId })
+
+    return res.send({
+      length: data?.length || 0,
+      data: data?.length && converterToDTO(data as MeetupDocument[]),
+    })
+  })
 
   getMeetupById = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response, next: NextFunction) => {
     const { meetupId } = req.params

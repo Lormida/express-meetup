@@ -28,7 +28,7 @@ router.use(isAuth)
  *            schema:
  *              $ref: '#/components/schema/Meetups'
  */
-router.get('/meetups', meetupController.getAllMeetups())
+router.get('/meetups', meetupController.getAllMeetups)
 
 /**
  * @openapi
@@ -173,6 +173,28 @@ router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetu
 /**
  * @openapi
  * '/api/meetups/{userId}':
+ *  get:
+ *     tags:
+ *     - Meetups (admin)
+ *     summary: Get all meetups of user (by admin)
+ *     parameters:
+ *      - name: userId
+ *        in: path
+ *        description: The id of the user
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/Meetups'
+ */
+router.get('/meetups/:userId', meetupController.getMeetupsByAdmin)
+
+/**
+ * @openapi
+ * '/api/meetup/{userId}':
  *  post:
  *     tags:
  *     - Meetup (admin)
@@ -199,7 +221,7 @@ router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetu
  *        description: Bad request
  */
 router.post(
-  '/meetups/:userId',
+  '/meetup/:userId',
   [protectByRoles('ADMIN'), validateResource(createMeetupSchema)],
   meetupController.createMeetupByAdmin
 )

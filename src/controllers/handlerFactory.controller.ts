@@ -94,27 +94,23 @@ export class HandlerFactory<T extends mongoose.Document> {
       })
     })
 
-  getAll = (postHandler: Function = (...rest: any[]) => rest, popOptions?: mongoose.PopulateOptions) =>
-    catchAsync(async (req: Request, res: Response) => {
-      let features
+  getAll = async <T>(reqQuery: object, findQuery: object = {}, popOptions?: mongoose.PopulateOptions) => {
+    let features
 
-      if (popOptions) {
-        //@ts-expect-error fix later
-        features = new APIFeatures(this.model.find({}).populate(popOptions), req.query)
-          .filter()
-          .sort()
-          .limitFields()
-          .paginate()
-      } else {
-        //@ts-expect-error fix later
-        features = new APIFeatures(this.model.find({}), req.query).filter().sort().limitFields().paginate()
-      }
+    if (popOptions) {
+      //@ts-expect-error fix later
+      features = new APIFeatures(this.model.find(findQuery).populate(popOptions), reqQuery)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate()
+    } else {
+      //@ts-expect-error fix later
+      features = new APIFeatures(this.model.find(findQuery), reqQuery).filter().sort().limitFields().paginate()
+    }
 
-      const docs = await features.query
+    const docs = (await features.query) as T[]
 
-      res.send({
-        length: docs.length,
-        data: postHandler(docs),
-      })
-    })
+    return docs
+  }
 }
