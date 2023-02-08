@@ -1,6 +1,6 @@
 import { UserDocument } from '../model/user.model'
 
-export class UserDto {
+export class UserDTO {
   id: string
   email: string
   name: string

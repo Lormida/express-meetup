@@ -94,7 +94,7 @@ export class HandlerFactory<T extends mongoose.Document> {
       })
     })
 
-  getAll = (popOptions?: mongoose.PopulateOptions) =>
+  getAll = (postHandler: Function = (...rest: any[]) => rest, popOptions?: mongoose.PopulateOptions) =>
     catchAsync(async (req: Request, res: Response) => {
       let features
 
@@ -113,9 +113,8 @@ export class HandlerFactory<T extends mongoose.Document> {
       const docs = await features.query
 
       res.send({
-        status: 'success',
         length: docs.length,
-        docs,
+        data: postHandler(docs),
       })
     })
 }

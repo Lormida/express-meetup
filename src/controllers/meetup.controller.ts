@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import Meetup from '../model/meetup.model'
+import { MeetupDTO } from '../dto/meetup.dto'
+import Meetup, { MeetupDocument } from '../model/meetup.model'
 import { CreateMeetupInput, GetMeetupInput, UpdateMeetupInput } from '../schema/meetup/meetup.schema'
 import meetupService from '../service/meetup.service'
 import { catchAsync } from '../utils/catchAsync'
@@ -9,8 +10,11 @@ import { HandlerFactory } from './handlerFactory.controller'
 class MeetupController {
   getAllMeetups = () => {
     const handlerFactory = new HandlerFactory(Meetup)
+
+    const converterToDTO = (meetups: MeetupDocument[]) => meetups.map((m) => new MeetupDTO(m))
     // TODO: add populating options
-    return handlerFactory.getAll()
+
+    return handlerFactory.getAll(converterToDTO)
   }
 
   getMeetupById = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response, next: NextFunction) => {
@@ -21,7 +25,7 @@ class MeetupController {
       return next(HttpError.NotFoundError('meetup is not found!'))
     }
 
-    return res.send(meetup)
+    return res.send(new MeetupDTO(meetup))
   })
 
   createMeetup = catchAsync(async (req: Request<{}, {}, CreateMeetupInput['body']>, res: Response) => {
@@ -32,8 +36,9 @@ class MeetupController {
       ...body,
       host: userId,
     })
+    // TODO : add error case
 
-    return res.send(newMeetup)
+    return res.send(new MeetupDTO(newMeetup))
   })
 
   //TODO: fix req type
@@ -46,8 +51,9 @@ class MeetupController {
       ...body,
       host: userId,
     })
+    //TODO: add error case
 
-    return res.send(newMeetup)
+    return res.send(new MeetupDTO(newMeetup))
   })
 
   updateMeetupById = catchAsync(
@@ -74,7 +80,8 @@ class MeetupController {
         }
       )
 
-      res.send(updatedMeetup)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      res.send(new MeetupDTO(updatedMeetup!))
     }
   )
 
@@ -116,27 +123,31 @@ class MeetupController {
       }
 
       const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
-      const status = removedMeetup ? 'success' : 'failure'
 
-      res.status(200).json({
-        status,
-        data: removedMeetup,
-      })
+      // Meetup wasn't found
+      if (!removedMeetup) {
+        return next(HttpError.NotFoundError('meetup is not found!'))
+      }
+
+      res.status(200).send(new MeetupDTO(removedMeetup))
     }
   )
 
-  deleteMeetupByAdminById = catchAsync(async (req: Request<UpdateMeetupInput['params']>, res: Response) => {
-    //@ts-expect-error fix later
-    const { userId, meetupId } = req.params
+  deleteMeetupByAdminById = catchAsync(
+    async (req: Request<UpdateMeetupInput['params']>, res: Response, next: NextFunction) => {
+      //@ts-expect-error fix later
+      const { userId, meetupId } = req.params
 
-    const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
-    const status = removedMeetup ? 'success' : 'failure'
+      const removedMeetup = await meetupService.findAndDeleteMeetup({ $and: [{ _id: meetupId }, { host: userId }] })
 
-    res.status(200).json({
-      status,
-      data: removedMeetup,
-    })
-  })
+      // Meetup wasn't found
+      if (!removedMeetup) {
+        return next(HttpError.NotFoundError('meetup is not found!'))
+      }
+
+      res.status(200).send(new MeetupDTO(removedMeetup))
+    }
+  )
 }
 
 const meetupController = new MeetupController()

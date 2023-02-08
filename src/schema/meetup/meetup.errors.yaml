@@ -1,0 +1,15 @@
+components:
+  schema:
+    MeetupNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Meetup not found
+    
+    MeetupBadRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Incorrect ID mongoDB

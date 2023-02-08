@@ -16,10 +16,9 @@ const payload = {
       })
     ).min(2),
     place: string().optional(),
-    time: string({
+    time: date({
+      invalid_type_error: "It's not a date",
       required_error: 'Meetup must have a time',
-    }).datetime({
-      message: "It's not a date",
     }),
   }),
 }
@@ -46,21 +45,17 @@ const payloadOptional = {
       .min(2)
       .optional(),
     place: string().optional(),
-    time: string({
+    time: date({
+      invalid_type_error: "It's not a date",
       required_error: 'Meetup must have a time',
-    })
-      .datetime({
-        message: "It's not a date",
-      })
-      .optional(),
+    }).optional(),
   }),
 }
+// TODO check date validator
 
 const params = {
   params: object({
-    meetupId: string({
-      required_error: 'meetupId is required',
-    }),
+    meetupId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
   }),
 }
 

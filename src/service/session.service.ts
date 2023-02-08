@@ -1,6 +1,6 @@
 import config from 'config'
 import jwt from 'jsonwebtoken'
-import { UserDto } from '../dto/User.dto'
+import { UserDTO } from '../dto/user.dto'
 import sessionModel from '../model/sesssion.model'
 
 const JWT_ACCESS_SECRET = config.get<string>('JWT_ACCESS_SECRET')
@@ -10,7 +10,7 @@ const ACCESS_TOKEN_EXPIRATION = config.get<string>('ACCESS_TOKEN_EXPIRATION')
 const REFRESH_TOKEN_EXPIRATION = config.get<string>('REFRESH_TOKEN_EXPIRATION')
 
 class SessionService {
-  generateTokens = (payload: UserDto) => ({
+  generateTokens = (payload: UserDTO) => ({
     accessToken: jwt.sign(payload, JWT_ACCESS_SECRET, {
       expiresIn: ACCESS_TOKEN_EXPIRATION,
     }),

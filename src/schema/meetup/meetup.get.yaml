@@ -1,0 +1,56 @@
+components:
+  schema:
+    Meetups:
+      type: object
+      required:
+        - length
+        - data
+      properties:
+        length:
+          type: number
+        data:
+          type: array
+          items:
+            $ref: "#/components/schema/Meetup"
+
+    Meetup:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - tags
+        - host
+        - time
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          example: 63e1f99adb7a8c99963a4f77
+        name:
+          type: string
+          example: 'Music Meetup in school #1'
+        description:
+          type: string
+          example: 'Some meetup about school and music'
+        tags:
+          type: array
+          items:
+            type: string
+          example: ['school', 'music']
+        place:
+          type: string
+          default: Minsk
+        host:
+          type: string
+          example: 63e1e391baeacd92ee577588
+        time:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

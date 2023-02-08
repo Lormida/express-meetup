@@ -1,0 +1,8 @@
+components:
+  schema:
+    UserNotAuthorized:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User is not authorized

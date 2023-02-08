@@ -1,16 +1,16 @@
-import { UserDto } from '../dto/User.dto'
+import { UserDTO } from '../dto/user.dto'
 import UserModel, { UserDocument } from '../model/user.model'
 import HttpError from '../utils/HttpError'
 import sessionService from './session.service'
 
 class AuthService {
   createSession = async (user: UserDocument) => {
-    const userDto = new UserDto(user)
+    const userDTO = new UserDTO(user)
 
-    const tokens = sessionService.generateTokens({ ...userDto })
-    await sessionService.saveToken(userDto.id, tokens.refreshToken)
+    const tokens = sessionService.generateTokens({ ...userDTO })
+    await sessionService.saveToken(userDTO.id, tokens.refreshToken)
 
-    return { ...tokens, user: userDto }
+    return { ...tokens, user: userDTO }
   }
 
   registration = async (email: string, name: string, password: string, roles: string[]) => {

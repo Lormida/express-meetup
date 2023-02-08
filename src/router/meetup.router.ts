@@ -25,7 +25,7 @@ router.use(isAuth)
  *         description: Success
  *         content:
  *          application/json:
- *           schema:
+ *            schema:
  *              $ref: '#/components/schema/Meetups'
  */
 router.get('/meetups', meetupController.getAllMeetups())
@@ -36,7 +36,7 @@ router.get('/meetups', meetupController.getAllMeetups())
  *  get:
  *     tags:
  *     - Meetups
- *     summary: Get all meetups
+ *     summary: Get meetup by id
  *     parameters:
  *      - name: meetupId
  *        in: path
@@ -50,17 +50,68 @@ router.get('/meetups', meetupController.getAllMeetups())
  *           schema:
  *             $ref: '#/components/schema/Meetup'
  *       404:
- *         description: Failure
+ *         description: "Error: Not found"
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schema/MeetupNotFound'
- *
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+ *       400:
+ *         description: "Error: Bad request"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupBadRequest'
  */
 router.get('/meetup/:meetupId', [validateResource(getMeetupSchema)], meetupController.getMeetupById)
 
 router.post('/create-meetup', [validateResource(createMeetupSchema)], meetupController.createMeetup)
 router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetupController.updateMeetupById)
+
+/**
+ * @openapi
+ * '/api/meetups/{meetupId}':
+ *  delete:
+ *     tags:
+ *     - Meetups
+ *     summary: Delete meetup by id
+ *     parameters:
+ *      - name: meetupId
+ *        in: path
+ *        description: The id of the product
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Meetup'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupNotFound'
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+ *       400:
+ *         description: "Error: Bad request"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupBadRequest'
+ *
+ */
 router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetupController.deleteMeetupById)
 
 // Admin

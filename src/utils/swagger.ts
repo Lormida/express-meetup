@@ -11,7 +11,7 @@ const options: swaggerJsdoc.Options = {
       title: 'REST API Docs',
       version,
     },
-    /* components: {
+    components: {
       securitySchemas: {
         bearerAuth: {
           type: 'http',
@@ -19,12 +19,12 @@ const options: swaggerJsdoc.Options = {
           bearerFormat: 'JWT',
         },
       },
-    }, */
-    /*  security: [
+    },
+    security: [
       {
         bearerAuth: [],
       },
-    ], */
+    ],
   },
   apis: ['./src/router/*.ts', './src/schema/**/*.yaml'],
 }
