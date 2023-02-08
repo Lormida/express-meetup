@@ -10,6 +10,7 @@ import deserializeUser from './middleware/deserializeUser.middleware'
 import { authRouter } from './router/auth.routes'
 //@ts-expect-error bug with common.js module
 import helmet from 'helmet'
+import swaggerDocs from './utils/swagger'
 
 const app = express()
 app.use(express.json())
@@ -28,6 +29,8 @@ app.use('/auth', authRouter)
 app.use('/api', userRouter)
 app.use('/api', meetupRouter)
 
+swaggerDocs(app, 3000)
+
 // Handle production
 if (process.env.NODE_ENV === 'production') {
   // Static folder
@@ -41,4 +44,5 @@ app.all('*', (req, _, next) => {
 })
 
 app.use(errorMiddleware)
+
 export default app

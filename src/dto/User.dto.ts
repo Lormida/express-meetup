@@ -1,13 +1,19 @@
 import { UserDocument } from '../model/user.model'
 
 export class UserDto {
-  email: string
   id: string
-  roles: string[]
+  email: string
+  name: string
+  roles: [{ value: 'USER' | 'ADMIN' }]
+  createdAt: Date
+  updatedAt: Date
 
   constructor(model: UserDocument) {
-    this.email = model.email
     this.id = model._id
+    this.email = model.email
+    this.name = model.name
     this.roles = model.roles
+    this.createdAt = model.createdAt
+    this.updatedAt = model.updatedAt
   }
 }
