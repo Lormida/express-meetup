@@ -101,11 +101,11 @@ router.post('/meetup', [validateResource(createMeetupSchema)], meetupController.
  *  patch:
  *     tags:
  *     - Meetup
- *     summary: Create a meetup
+ *     summary: Update a meetup
  *     parameters:
  *      - name: meetupId
  *        in: path
- *        description: The id of the meetup
+ *        description: The id of the modifying meetup
  *        required: true
  *     requestBody:
  *      required: true
@@ -166,18 +166,125 @@ router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetup
  */
 router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetupController.deleteMeetupById)
 
+/** -------------------------------------------------------------------------------------------------------------- */
+
 // Admin
+
+/**
+ * @openapi
+ * '/api/meetups/{userId}':
+ *  post:
+ *     tags:
+ *     - Meetup (admin)
+ *     summary: Create a meetup for user (by admin)
+ *     parameters:
+ *      - name: userId
+ *        in: path
+ *        description: The id of user(host of meetup)
+ *        required: true
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schema/CreateMeetupInput'
+ *     responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/CreateMeetupResponse'
+ *      400:
+ *        description: Bad request
+ */
 router.post(
   '/meetups/:userId',
   [protectByRoles('ADMIN'), validateResource(createMeetupSchema)],
   meetupController.createMeetupByAdmin
 )
+
+/**
+ * @openapi
+ * '/api/meetup/{userId}/{meetupId}':
+ *  patch:
+ *     tags:
+ *     - Meetup (admin)
+ *     summary: Update a meetup for user (by admin)
+ *     parameters:
+ *      - name: userId
+ *        in: path
+ *        description: The id of user(host of meetup)
+ *        required: true
+ *      - name: meetupId
+ *        in: path
+ *        description: The id of the modifying meetup
+ *        required: true
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schema/PatchMeetupInput'
+ *     responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/PatchMeetupResponse'
+ *      400:
+ *        description: Bad request
+ */
 router.patch(
-  '/meetups/:userId/:meetupId',
+  '/meetup/:userId/:meetupId',
   [protectByRoles('ADMIN'), validateResource(updateMeetupSchema)],
   meetupController.updateMeetupByAdminById
 )
 
+/**
+ * @openapi
+ * '/api/meetup/{userId}/{meetupId}':
+ *  delete:
+ *     tags:
+ *     - Meetup (admin)
+ *     summary: Delete meetup by id for user (by admin)
+ *     parameters:
+ *      - name: userId
+ *        in: path
+ *        description: The id of user(host of meetup)
+ *        required: true
+ *      - name: meetupId
+ *        in: path
+ *        description: The id of the deleting meetup
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Meetup'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupNotFound'
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+ *       400:
+ *         description: "Error: Bad request"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupBadRequest'
+ *
+ */
 router.delete(
   '/meetups/:userId/:meetupId',
   [protectByRoles('ADMIN'), validateResource(deleteMeetupSchema)],
