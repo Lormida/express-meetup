@@ -1,0 +1,68 @@
+components:
+  schema:
+    PatchMeetupInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "First Meetup"
+        description:
+          type: string
+          example: "This is a description for the first meetup"
+        tags:
+          type: array
+          items:
+            type: string
+            example: "meetup, tech, networking"
+        place:
+          type: string
+          example: "New York"
+        time:
+          type: string
+          format: date-time
+          example: "2023-03-01T12:00:00Z"
+
+    PatchMeetupResponse:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - tags
+        - host
+        - time
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          example: "63e1f99adb7a8c99963a4f77"
+        name:
+          type: string
+          example: "First Meetup"
+        description:
+          type: string
+          example: "This is a description for the first meetup"
+        tags:
+          type: array
+          items:
+            type: string
+            example: "meetup, tech, networking"
+        place:
+          type: string
+          example: "New York"
+        time:
+          type: string
+          format: date-time
+          example: "2023-03-01T12:00:00Z"
+        host:
+          type: string
+          example: "5f5d50c24fc7f900070ab5e8"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-02-08T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-02-08T12:00:00Z"

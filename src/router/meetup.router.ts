@@ -32,15 +32,15 @@ router.get('/meetups', meetupController.getAllMeetups())
 
 /**
  * @openapi
- * '/api/meetups/{meetupId}':
+ * '/api/meetup/{meetupId}':
  *  get:
  *     tags:
- *     - Meetups
+ *     - Meetup
  *     summary: Get meetup by id
  *     parameters:
  *      - name: meetupId
  *        in: path
- *        description: The id of the product
+ *        description: The id of the meetup
  *        required: true
  *     responses:
  *       200:
@@ -70,20 +70,72 @@ router.get('/meetups', meetupController.getAllMeetups())
  */
 router.get('/meetup/:meetupId', [validateResource(getMeetupSchema)], meetupController.getMeetupById)
 
-router.post('/create-meetup', [validateResource(createMeetupSchema)], meetupController.createMeetup)
+/**
+ * @openapi
+ * '/api/meetup':
+ *  post:
+ *     tags:
+ *     - Meetup
+ *     summary: Create a meetup
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schema/CreateMeetupInput'
+ *     responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/CreateMeetupResponse'
+ *      400:
+ *        description: Bad request
+ */
+router.post('/meetup', [validateResource(createMeetupSchema)], meetupController.createMeetup)
+
+/**
+ * @openapi
+ * '/api/meetup/{meetupId}':
+ *  patch:
+ *     tags:
+ *     - Meetup
+ *     summary: Create a meetup
+ *     parameters:
+ *      - name: meetupId
+ *        in: path
+ *        description: The id of the meetup
+ *        required: true
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schema/PatchMeetupInput'
+ *     responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/PatchMeetupResponse'
+ *      400:
+ *        description: Bad request
+ */
 router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetupController.updateMeetupById)
 
 /**
  * @openapi
- * '/api/meetups/{meetupId}':
+ * '/api/meetup/{meetupId}':
  *  delete:
  *     tags:
- *     - Meetups
+ *     - Meetup
  *     summary: Delete meetup by id
  *     parameters:
  *      - name: meetupId
  *        in: path
- *        description: The id of the product
+ *        description: The id of the meetup
  *        required: true
  *     responses:
  *       200:
@@ -116,18 +168,18 @@ router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetu
 
 // Admin
 router.post(
-  '/create-meetup/:userId',
+  '/meetups/:userId',
   [protectByRoles('ADMIN'), validateResource(createMeetupSchema)],
   meetupController.createMeetupByAdmin
 )
 router.patch(
-  '/meetup/:userId/:meetupId',
+  '/meetups/:userId/:meetupId',
   [protectByRoles('ADMIN'), validateResource(updateMeetupSchema)],
   meetupController.updateMeetupByAdminById
 )
 
 router.delete(
-  '/meetup/:userId/:meetupId',
+  '/meetups/:userId/:meetupId',
   [protectByRoles('ADMIN'), validateResource(deleteMeetupSchema)],
   meetupController.deleteMeetupByAdminById
 )

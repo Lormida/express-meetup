@@ -10,7 +10,19 @@ const router = Router()
 router.get('/refresh', authController.refresh)
 
 router.post('/logout', isAuth, authController.logout)
+/* interface CreateUserInput {
+  email: string
+  name: string
+  password: string
+}
 
+interface CreateUserResponse {
+  id: string
+  email: string
+  name: string
+  createdAt: string
+  updatedAt: string
+} */
 router.post('/registration', [validateResource(createUserSchema)], authController.registration('USER'))
 router.post(
   '/admin-registration',
