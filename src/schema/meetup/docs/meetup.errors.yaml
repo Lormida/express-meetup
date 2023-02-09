@@ -6,10 +6,10 @@ components:
         message:
           type: string
           example: Meetup not found
-    
+
     MeetupBadRequest:
       type: object
       properties:
         message:
           type: string
-          example: Incorrect ID mongoDB
+          example: Incorrect ID mongoDB in meetupId

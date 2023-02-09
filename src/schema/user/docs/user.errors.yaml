@@ -1,0 +1,8 @@
+components:
+  schema:
+    UserBadRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Incorrect ID mongoDB in userId

@@ -61,7 +61,6 @@ router.get('/meetups', meetupController.getAllMeetups)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schema/UserNotAuthorized'
-
  *       403:
  *         description: "Error: Permission denied"
  *         content:
@@ -134,7 +133,11 @@ router.post('/meetup', [validateResource(createMeetupSchema)], meetupController.
  *            schema:
  *              $ref: '#/components/schema/PatchMeetupResponse'
  *      400:
- *        description: Bad request
+ *        description: "Error: Bad request"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/MeetupBadRequest'
  *      401:
  *        description: "Error: Unauthorized"
  *        content:
@@ -196,14 +199,12 @@ router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetup
  */
 router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetupController.deleteMeetupById)
 
-/** -------------------------------------------------------------------------------------------------------------- */
-
 // Admin
 
 /**
  * @openapi
- * '/api/meetups/{userId}':
- *  get:
+ * '/api/admin/meetups/{userId}':
+ *  patch:
  *     tags:
  *     - Meetups (admin)
  *     summary: Get all meetups of user (by admin)
@@ -219,24 +220,24 @@ router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetu
  *          application/json:
  *            schema:
  *              $ref: '#/components/schema/Meetups'
- *      401:
- *        description: "Error: Unauthorized"
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schema/UserNotAuthorized'
- *      403:
- *        description: "Error: Permission denied"
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schema/UserNoPermission'
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+ *       403:
+ *         description: "Error: Permission denied"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNoPermission'
  */
-router.get('/meetups/:userId', meetupController.getMeetupsByAdmin)
+router.get('/admin/meetups/:userId', meetupController.getMeetupsByAdmin)
 
 /**
  * @openapi
- * '/api/meetup/{userId}':
+ * '/api/admin/meetup/{userId}':
  *  post:
  *     tags:
  *     - Meetup (admin)
@@ -260,7 +261,11 @@ router.get('/meetups/:userId', meetupController.getMeetupsByAdmin)
  *            schema:
  *              $ref: '#/components/schema/MeetupResponse'
  *      400:
- *        description: Bad request
+ *        description: "Error: Bad request"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserBadRequest'
  *      401:
  *        description: "Error: Unauthorized"
  *        content:
@@ -275,14 +280,14 @@ router.get('/meetups/:userId', meetupController.getMeetupsByAdmin)
  *              $ref: '#/components/schema/UserNoPermission'
  */
 router.post(
-  '/meetup/:userId',
+  '/admin/meetup/:userId',
   [protectByRoles('ADMIN'), validateResource(createMeetupSchema)],
   meetupController.createMeetupByAdmin
 )
 
 /**
  * @openapi
- * '/api/meetup/{userId}/{meetupId}':
+ * '/api/admin/meetup/{userId}/{meetupId}':
  *  patch:
  *     tags:
  *     - Meetup (admin)
@@ -310,7 +315,13 @@ router.post(
  *            schema:
  *              $ref: '#/components/schema/PatchMeetupResponse'
  *      400:
- *        description: Bad request
+ *        description: "Error: Bad request"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              oneOf:
+ *                - $ref: '#/components/schema/UserBadRequest'
+ *                - $ref: '#/components/schema/MeetupBadRequest'
  *      401:
  *        description: "Error: Unauthorized"
  *        content:
@@ -325,14 +336,14 @@ router.post(
  *              $ref: '#/components/schema/UserNoPermission'
  */
 router.patch(
-  '/meetup/:userId/:meetupId',
+  '/admin/meetup/:userId/:meetupId',
   [protectByRoles('ADMIN'), validateResource(updateMeetupSchema)],
   meetupController.updateMeetupByAdminById
 )
 
 /**
  * @openapi
- * '/api/meetup/{userId}/{meetupId}':
+ * '/api/admin/meetup/{userId}/{meetupId}':
  *  delete:
  *     tags:
  *     - Meetup (admin)
@@ -379,7 +390,7 @@ router.patch(
  *               $ref: '#/components/schema/MeetupNotFound'
  */
 router.delete(
-  '/meetups/:userId/:meetupId',
+  '/admin/meetup/:userId/:meetupId',
   [protectByRoles('ADMIN'), validateResource(deleteMeetupSchema)],
   meetupController.deleteMeetupByAdminById
 )

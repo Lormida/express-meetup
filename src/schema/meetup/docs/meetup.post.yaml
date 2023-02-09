@@ -10,22 +10,22 @@ components:
       properties:
         name:
           type: string
-          example: "First Meetup"
+          example: 'First Meetup'
         description:
           type: string
-          example: "This is a description for the first meetup"
+          example: 'This is a description for the first meetup'
         tags:
           type: array
           items:
             type: string
-            example: "meetup, tech, networking"
+            example: 'meetup, tech, networking'
         place:
           type: string
-          example: "New York"
+          example: 'New York'
         time:
           type: string
           format: date-time
-          example: "2023-03-01T12:00:00Z"
+          example: '2023-03-01T12:00:00Z'
 
     MeetupResponse:
       type: object
@@ -41,33 +41,33 @@ components:
       properties:
         id:
           type: string
-          example: "63e1f99adb7a8c99963a4f77"
+          example: '63e1f99adb7a8c99963a4f77'
         name:
           type: string
-          example: "First Meetup"
+          example: 'First Meetup'
         description:
           type: string
-          example: "This is a description for the first meetup"
+          example: 'This is a description for the first meetup'
         tags:
           type: array
           items:
             type: string
-            example: "meetup, tech, networking"
+            example: 'meetup, tech, networking'
         place:
           type: string
-          example: "New York"
+          example: 'New York'
         time:
           type: string
           format: date-time
-          example: "2023-03-01T12:00:00Z"
+          example: '2023-03-01T12:00:00Z'
         host:
           type: string
-          example: "5f5d50c24fc7f900070ab5e8"
+          example: '5f5d50c24fc7f900070ab5e8'
         createdAt:
           type: string
           format: date-time
-          example: "2023-02-08T12:00:00Z"
+          example: '2023-02-08T12:00:00Z'
         updatedAt:
           type: string
           format: date-time
-          example: "2023-02-08T12:00:00Z"
+          example: '2023-02-08T12:00:00Z'

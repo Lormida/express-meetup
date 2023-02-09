@@ -8,13 +8,15 @@ const options: swaggerJsdoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'REST API Docs',
+      title: 'MEETUP REST API Docs',
       version,
     },
     components: {
-      securitySchemas: {
+      securitySchemes: {
         bearerAuth: {
           type: 'http',
+          name: 'Authorization',
+          description: 'Bearer token access these api endpoints',
           scheme: 'bearer',
           bearerFormat: 'JWT',
         },

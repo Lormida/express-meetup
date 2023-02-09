@@ -12,7 +12,7 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schema/Meetup"
+            $ref: '#/components/schema/Meetup'
 
     Meetup:
       type: object
@@ -52,6 +52,8 @@ components:
         createdAt:
           type: string
           format: date-time
+          example: '2023-03-01T12:00:00Z'
         updatedAt:
           type: string
           format: date-time
+          example: '2023-03-01T12:00:00Z'

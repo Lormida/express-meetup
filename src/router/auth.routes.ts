@@ -20,7 +20,7 @@ const router = Router()
  *         content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schema/AuthRefreshToken'
+ *              $ref: '#/components/schema/AuthUserData'
  *       401:
  *         description: "Error: Unauthorized"
  *         content:
@@ -64,7 +64,7 @@ router.post('/logout', isAuth, authController.logout)
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schema/UserResponse'
+ *              $ref: '#/components/schema/AuthUserData'
  *      400:
  *        description: Bad request
  */
@@ -72,7 +72,7 @@ router.post('/registration', [validateResource(createUserSchema)], authControlle
 
 /**
  * @openapi
- * '/auth/admin-registration':
+ * '/auth/admin/registration':
  *  post:
  *     tags:
  *     - Authorization (admin)
@@ -89,7 +89,7 @@ router.post('/registration', [validateResource(createUserSchema)], authControlle
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schema/UserAdminResponse'
+ *              $ref: '#/components/schema/AuthUserAdminData'
  *      400:
  *        description: Bad request
  *      401:
@@ -106,7 +106,7 @@ router.post('/registration', [validateResource(createUserSchema)], authControlle
  *              $ref: '#/components/schema/UserNoPermission'
  */
 router.post(
-  '/admin-registration',
+  '/admin/registration',
   [isAuth, protectByRoles('ADMIN'), validateResource(createUserSchema)],
   authController.registration('ADMIN')
 )
@@ -130,7 +130,7 @@ router.post(
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schema/UserResponse'
+ *              $ref: '#/components/schema/AuthUserData'
  *      400:
  *         description: "Error: Bad request"
  *         content:
