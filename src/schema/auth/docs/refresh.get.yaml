@@ -1,0 +1,18 @@
+components:
+  schema:
+    AuthRefreshToken:
+      type: object
+      required:
+        - accessToken
+        - refreshToken
+        - user
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTBiODE1ZTRhYmI2ZTRlYmRiNjYwMSIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2UgRG9lIiwicm9sZXMiOlt7InZhbHVlIjoiVVNFUiJ9XSwiY3JlYXRlZEF0IjoiMjAyMy0wMi0wNlQwODoxOTozMy42MThaIiwidXBkYXRlZEF0IjoiMjAyMy0wMi0wNlQwODoxOTozMy42MThaIiwiaWF0IjoxNjc1OTI5ODI1LCJleHAiOjE2NzU5NDQyMjV9.9ZnW3up-eChRZ-Aii3iEBpPKf-n7CZjglsSA2kru49A
+        refreshToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTBiODE1ZTRhYmI2ZTRlYmRiNjYwMSIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2UgRG9lIiwicm9sZXMiOlt7InZhbHVlIjoiVVNFUiJ9XSwiY3JlYXRlZEF0IjoiMjAyMy0wMi0wNlQwODoxOTozMy42MThaIiwidXBkYXRlZEF0IjoiMjAyMy0wMi0wNlQwODoxOTozMy42MThaIiwiaWF0IjoxNjc1OTI5ODI1LCJleHAiOjE2NzYwMTYyMjV9.6Pt1-vxP5QXb4R_gkpk38wU-grzmytiggxJUUw8v3Gc
+        user:
+          type: object
+          $ref: "#/components/schema/User"

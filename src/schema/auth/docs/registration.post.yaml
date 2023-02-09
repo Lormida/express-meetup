@@ -1,0 +1,18 @@
+components:
+  schema:
+    CreateUserInput:
+      type: object
+      required:
+        - email
+        - name
+        - password
+      properties:
+        email:
+          type: string
+          example: vasya@example.com
+        name:
+          type: string
+          example: Vasya777
+        password:
+          type: string
+          example: password123

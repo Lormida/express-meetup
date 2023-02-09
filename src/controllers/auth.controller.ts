@@ -33,20 +33,24 @@ class UserController {
     res.send(userData)
   })
 
-  logout = catchAsync(async (req: Request, res: Response) => {
+  logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { refreshToken } = req.cookies
     const token = await authService.logout(refreshToken)
 
+    if (!token) {
+      return next(HttpError.BadRequestError('Some error during deleting refresh token'))
+    }
+
     res.clearCookie('refreshToken')
-    res.send(token)
+    return res.sendStatus(200)
   })
 
-  refresh = catchAsync(async (req: Request, res: Response) => {
+  refresh = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { refreshToken } = req.cookies
     const userData = await authService.refresh(refreshToken)
 
     if (!userData) {
-      throw HttpError.UnauthorizedError()
+      return next(HttpError.UnauthorizedError())
     }
 
     setCookie(res, 'refreshToken', userData.refreshToken)

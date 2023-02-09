@@ -89,7 +89,7 @@ router.get('/meetup/:meetupId', [validateResource(getMeetupSchema)], meetupContr
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schema/CreateMeetupResponse'
+ *              $ref: '#/components/schema/MeetupResponse'
  *      400:
  *        description: Bad request
  */
@@ -216,7 +216,7 @@ router.get('/meetups/:userId', meetupController.getMeetupsByAdmin)
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schema/CreateMeetupResponse'
+ *              $ref: '#/components/schema/MeetupResponse'
  *      400:
  *        description: Bad request
  */

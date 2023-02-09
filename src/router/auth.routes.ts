@@ -7,23 +7,69 @@ import { loginUserSchema } from '../schema/auth/login.schema'
 import { protectByRoles } from '../middleware/protectedByRole.middleware'
 const router = Router()
 
+/**
+ * @openapi
+ * '/auth/refresh':
+ *  get:
+ *     tags:
+ *     - Authorization
+ *     summary: Update pair refresh & access token
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/AuthRefreshToken'
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+ */
 router.get('/refresh', authController.refresh)
 
+/**
+ * @openapi
+ * '/auth/logout':
+ *  post:
+ *     tags:
+ *     - Authorization
+ *     summary: Logout from the account
+ *     responses:
+ *      200:
+ *        description: OK
+ *      401:
+ *        description: Some error during deleting refresh token
+ */
 router.post('/logout', isAuth, authController.logout)
-/* interface CreateUserInput {
-  email: string
-  name: string
-  password: string
-}
 
-interface CreateUserResponse {
-  id: string
-  email: string
-  name: string
-  createdAt: string
-  updatedAt: string
-} */
+/**
+ * @openapi
+ * '/auth/registration':
+ *  post:
+ *     tags:
+ *     - Authorization
+ *     summary: Create a user
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schema/CreateUserInput'
+ *     responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserResponse'
+ *      400:
+ *        description: Bad request
+ */
 router.post('/registration', [validateResource(createUserSchema)], authController.registration('USER'))
+
 router.post(
   '/admin-registration',
   [isAuth, protectByRoles('ADMIN'), validateResource(createUserSchema)],

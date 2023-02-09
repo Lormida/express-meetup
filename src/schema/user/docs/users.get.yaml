@@ -1,19 +1,23 @@
 components:
   schema:
-    Users:
+    UsersResponse:
       type: array
       items:
-        $ref: "#/components/schema/User"
+        $ref: "#/components/schema/UserResponse"
 
-    User:
+    UserResponse:
       type: object
       required:
+        - id
         - email
         - name
         - roles
         - createdAt
         - updatedAt
       properties:
+        id:
+          type: string
+          example: 63e1f99adb7a8c99963a4f77
         email:
           type: string
         name:
@@ -28,6 +32,7 @@ components:
                 enum:
                   - ADMIN
                   - USER
+                example: USER
         createdAt:
           type: string
         updatedAt:

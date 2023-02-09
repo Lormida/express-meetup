@@ -16,7 +16,7 @@ const router = Router()
  *         content:
  *          application/json:
  *           schema:
- *              $ref: '#/components/schema/Users'
+ *              $ref: '#/components/schema/UsersResponse'
  */
 router.get('/users', userController.getUsers)
 
