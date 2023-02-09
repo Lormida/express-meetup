@@ -11,14 +11,7 @@ export const protectByRoles = (...protectedRoles: any[]) =>
     const _roles = extractRoles(roles)
 
     if (!_roles || !elementIsIncluded(protectedRoles, _roles)) {
-      next(
-        new HttpError(
-          405,
-          `Error role (${_roles.join(',')}), but require (${protectedRoles.join(
-            ','
-          )}).You don't have permission to given operation!`
-        )
-      )
+      next(HttpError.NoPermissionError())
     }
 
     next()

@@ -17,6 +17,12 @@ const router = Router()
  *          application/json:
  *           schema:
  *              $ref: '#/components/schema/UsersResponse'
+ *      401:
+ *        description: "Error: Unauthorized"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNotAuthorized'
  */
 router.get('/users', userController.getUsers)
 

@@ -17,7 +17,7 @@ export default class HttpError extends Error {
   }
 
   static NoPermissionError() {
-    return new HttpError(403, `User does't have permission`)
+    return new HttpError(403, `User doesn't have the permission to given operation`)
   }
 
   static NotFoundError(message: string) {

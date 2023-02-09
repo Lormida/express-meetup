@@ -70,6 +70,41 @@ router.post('/logout', isAuth, authController.logout)
  */
 router.post('/registration', [validateResource(createUserSchema)], authController.registration('USER'))
 
+/**
+ * @openapi
+ * '/auth/admin-registration':
+ *  post:
+ *     tags:
+ *     - Authorization (admin)
+ *     summary: Create a user with role admin
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schema/CreateUserInput'
+ *     responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserAdminResponse'
+ *      400:
+ *        description: Bad request
+ *      401:
+ *        description: "Error: Unauthorized"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNotAuthorized'
+ *      403:
+ *        description: "Error: Permission denied"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNoPermission'
+ */
 router.post(
   '/admin-registration',
   [isAuth, protectByRoles('ADMIN'), validateResource(createUserSchema)],

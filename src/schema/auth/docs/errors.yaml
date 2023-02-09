@@ -7,6 +7,14 @@ components:
           type: string
           example: User is not authorized
 
+    UserNoPermission:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User doesn't have the permission to given operation
+
+
     UserNotFound:
       type: object
       properties:

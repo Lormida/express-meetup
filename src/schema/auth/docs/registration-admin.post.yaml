@@ -1,0 +1,34 @@
+components:
+  schema:
+    UserAdminResponse:
+          type: object
+          required:
+            - id
+            - email
+            - name
+            - roles
+            - createdAt
+            - updatedAt
+          properties:
+            id:
+              type: string
+              example: 63e1f99adb7a8c99963a4f77
+            email:
+              type: string
+            name:
+              type: string
+            roles:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                    enum:
+                      - ADMIN
+                      - USER
+                    example: ADMIN
+            createdAt:
+              type: string
+            updatedAt:
+              type: string

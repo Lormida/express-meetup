@@ -49,24 +49,31 @@ router.get('/meetups', meetupController.getAllMeetups)
  *          application/json:
  *           schema:
  *             $ref: '#/components/schema/Meetup'
- *       404:
- *         description: "Error: Not found"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/MeetupNotFound'
- *       401:
- *         description: "Error: Unauthorized"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/UserNotAuthorized'
  *       400:
  *         description: "Error: Bad request"
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schema/MeetupBadRequest'
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+
+ *       403:
+ *         description: "Error: Permission denied"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNoPermission'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupNotFound'
  */
 router.get('/meetup/:meetupId', [validateResource(getMeetupSchema)], meetupController.getMeetupById)
 
@@ -92,6 +99,12 @@ router.get('/meetup/:meetupId', [validateResource(getMeetupSchema)], meetupContr
  *              $ref: '#/components/schema/MeetupResponse'
  *      400:
  *        description: Bad request
+ *      401:
+ *        description: "Error: Unauthorized"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNotAuthorized'
  */
 router.post('/meetup', [validateResource(createMeetupSchema)], meetupController.createMeetup)
 
@@ -122,6 +135,18 @@ router.post('/meetup', [validateResource(createMeetupSchema)], meetupController.
  *              $ref: '#/components/schema/PatchMeetupResponse'
  *      400:
  *        description: Bad request
+ *      401:
+ *        description: "Error: Unauthorized"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNotAuthorized'
+ *      403:
+ *        description: "Error: Permission denied"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNoPermission'
  */
 router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetupController.updateMeetupById)
 
@@ -144,25 +169,30 @@ router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetup
  *          application/json:
  *           schema:
  *             $ref: '#/components/schema/Meetup'
- *       404:
- *         description: "Error: Not found"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/MeetupNotFound'
- *       401:
- *         description: "Error: Unauthorized"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/UserNotAuthorized'
  *       400:
  *         description: "Error: Bad request"
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schema/MeetupBadRequest'
- *
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+ *       403:
+ *         description: "Error: Permission denied"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNoPermission'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupNotFound'
  */
 router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetupController.deleteMeetupById)
 
@@ -189,6 +219,18 @@ router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetu
  *          application/json:
  *            schema:
  *              $ref: '#/components/schema/Meetups'
+ *      401:
+ *        description: "Error: Unauthorized"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNotAuthorized'
+ *      403:
+ *        description: "Error: Permission denied"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNoPermission'
  */
 router.get('/meetups/:userId', meetupController.getMeetupsByAdmin)
 
@@ -219,6 +261,18 @@ router.get('/meetups/:userId', meetupController.getMeetupsByAdmin)
  *              $ref: '#/components/schema/MeetupResponse'
  *      400:
  *        description: Bad request
+ *      401:
+ *        description: "Error: Unauthorized"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNotAuthorized'
+ *      403:
+ *        description: "Error: Permission denied"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNoPermission'
  */
 router.post(
   '/meetup/:userId',
@@ -257,6 +311,18 @@ router.post(
  *              $ref: '#/components/schema/PatchMeetupResponse'
  *      400:
  *        description: Bad request
+ *      401:
+ *        description: "Error: Unauthorized"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNotAuthorized'
+ *      403:
+ *        description: "Error: Permission denied"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserNoPermission'
  */
 router.patch(
   '/meetup/:userId/:meetupId',
@@ -287,25 +353,30 @@ router.patch(
  *          application/json:
  *           schema:
  *             $ref: '#/components/schema/Meetup'
- *       404:
- *         description: "Error: Not found"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/MeetupNotFound'
- *       401:
- *         description: "Error: Unauthorized"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/UserNotAuthorized'
  *       400:
  *         description: "Error: Bad request"
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schema/MeetupBadRequest'
- *
+ *       401:
+ *         description: "Error: Unauthorized"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotAuthorized'
+ *       403:
+ *         description: "Error: Permission denied"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNoPermission'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupNotFound'
  */
 router.delete(
   '/meetups/:userId/:meetupId',
