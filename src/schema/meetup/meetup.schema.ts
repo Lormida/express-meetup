@@ -18,9 +18,13 @@ const payload = {
     place: string().optional(),
     time: string({
       required_error: 'Meetup must have a time',
-    }).datetime({
-      message: "It's not a date",
-    }),
+    })
+      .datetime({
+        message: "It's not a date",
+      })
+      .refine((time) => new Date(time) > new Date(), {
+        message: "Meetup can't be in the past",
+      }),
   }),
 }
 
@@ -51,6 +55,9 @@ const payloadOptional = {
     })
       .datetime({
         message: "It's not a date",
+      })
+      .refine((time) => new Date(time) > new Date(), {
+        message: "Meetup can't be in the past",
       })
       .optional(),
   }),

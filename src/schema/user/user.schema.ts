@@ -1,5 +1,10 @@
 import { array, object, string, TypeOf, z } from 'zod'
 
+enum UserRole {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
 const payload = {
   body: object({
     email: string({
@@ -13,8 +18,14 @@ const payload = {
     })
       .min(6, 'Password should be at least 6 characters long')
       .max(20, 'Password should be less than 20 characters long'),
+    roles: array(
+      z.nativeEnum(UserRole, {
+        errorMap: (issue, ctx) => {
+          return { message: `${ctx.defaultError}` }
+        },
+      })
+    ),
   }),
-  roles: array(string(z.enum(['USER', 'ADMIN']))),
 }
 
 const payloadOptional = {
@@ -33,6 +44,13 @@ const payloadOptional = {
       .min(6, 'Password should be at least 6 characters long')
       .max(20, 'Password should be less than 20 characters long')
       .optional(),
+    roles: array(
+      z.nativeEnum(UserRole, {
+        errorMap: (issue, ctx) => {
+          return { message: `${ctx.defaultError}` }
+        },
+      })
+    ).optional(),
   }),
 }
 

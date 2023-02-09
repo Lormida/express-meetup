@@ -125,7 +125,7 @@ class MeetupController {
         return next(HttpError.NotFoundError('meetup is not found!'))
       }
 
-      res.send(200).send(new MeetupDTO(updatedMeetup))
+      res.status(200).send(new MeetupDTO(updatedMeetup))
     }
   )
 
@@ -150,7 +150,7 @@ class MeetupController {
         return next(HttpError.NotFoundError('meetup is not found!'))
       }
 
-      res.status(200).send(updatedMeetup)
+      res.status(200).send(new MeetupDTO(updatedMeetup))
     }
   )
 
