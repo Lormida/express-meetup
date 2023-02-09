@@ -153,12 +153,13 @@ router.post('/meetup', [validateResource(createMeetupSchema)], meetupController.
  *          application/json:
  *            schema:
  *              $ref: '#/components/schema/UserNoPermission'
- *       404:
- *         description: "Error: Not found"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/MeetupNotFound'
+ *      404:
+ *        description: "Error: Meetup not found"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/MeetupNotFound'
+ *
  */
 router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetupController.updateMeetupById)
 
@@ -293,12 +294,12 @@ router.get('/admin/meetups/:userId', meetupController.getMeetupsByAdmin)
  *          application/json:
  *            schema:
  *              $ref: '#/components/schema/UserNoPermission'
- *       404:
- *         description: "Error: Not found"
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schema/UserNotFound'
+ *      404:
+ *        description: "Error: Meetup not found"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/MeetupNotFound'
  */
 router.post(
   '/admin/meetup/:userId',

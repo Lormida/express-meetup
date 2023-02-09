@@ -4,7 +4,7 @@
  * Potentially this class can be used to create reusable controller, but too many but
  * The main issue, that this code is badly scales (my opinion) or overengeenring
  */
-import mongoose from 'mongoose'
+import mongoose, { PopulateOptions } from 'mongoose'
 import HttpError from '../utils/HttpError'
 import { Request, Response, NextFunction } from 'express'
 import { catchAsync } from '../utils/catchAsync'
@@ -29,23 +29,19 @@ export class HandlerFactory<T extends mongoose.Document> {
         return next(HttpError.NotFoundError('No doc found with that ID'))
       }
 
-      res.status(204).send({
-        status: 'success',
-        data: null,
-      })
+      res.status(200).send(doc)
     })
 
   createOne = <TRequest extends Request>(executor: TFunc<object>) =>
-    catchAsync(async (req: TRequest, res: Response) => {
+    catchAsync(async (req: TRequest, res: Response, next: NextFunction) => {
       const additionalData = executor(req, res)
       const newDoc = await this.model.create({ ...req.body, ...additionalData })
 
-      const status = newDoc ? 'success' : 'failure'
+      if (!newDoc) {
+        return next(HttpError.NotFoundError('The create operation was error '))
+      }
 
-      res.send({
-        status,
-        data: newDoc,
-      })
+      res.status(201).send(newDoc)
     })
 
   updateById = (preMiddleware: TFuncPreMiddleware, getId: TFuncGetId) =>
@@ -62,21 +58,16 @@ export class HandlerFactory<T extends mongoose.Document> {
         return next(HttpError.NotFoundError('No doc found with that ID'))
       }
 
-      res.status(200).send({
-        status: 'success',
-        data: {
-          doc,
-        },
-      })
+      res.status(200).send(doc)
     })
 
-  getById = (getId: TFuncGetId, popOptions?: mongoose.PopulateOptions) =>
+  getById = (getId: TFuncGetId, popOptions?: PopulateOptions) =>
     catchAsync(async (req: Request, res: Response, next: NextFunction) => {
       const id = getId(req, res)
 
       let docQuery
 
-      if (popOptions) {
+      if (popOptions && Object.keys(popOptions).length > 0) {
         docQuery = this.model.findById(id).populate(popOptions)
       } else {
         docQuery = this.model.findById(id)
@@ -88,24 +79,19 @@ export class HandlerFactory<T extends mongoose.Document> {
         return next(HttpError.NotFoundError('No doc found with that ID'))
       }
 
-      res.status(200).send({
-        status: 'success',
-        data,
-      })
+      res.status(200).send(data)
     })
 
-  getAll = async <T>(reqQuery: object, findQuery: object = {}, popOptions?: mongoose.PopulateOptions) => {
+  getAll = async <T>(reqQuery: object, findQuery: object = {}, popOptions?: PopulateOptions) => {
     let features
 
-    if (popOptions) {
-      //@ts-expect-error fix later
+    if (popOptions && Object.keys(popOptions).length > 0) {
       features = new APIFeatures(this.model.find(findQuery).populate(popOptions), reqQuery)
         .filter()
         .sort()
         .limitFields()
         .paginate()
     } else {
-      //@ts-expect-error fix later
       features = new APIFeatures(this.model.find(findQuery), reqQuery).filter().sort().limitFields().paginate()
     }
 

@@ -5,7 +5,7 @@ import HttpError from '../utils/HttpError'
 
 export const protectByRoles = (...protectedRoles: any[]) =>
   catchAsync(async function (req: Request, res: Response, next: NextFunction) {
-    //@ts-expect-error fix later
+    //@ts-expect-error impossible control, cause middleware mutates shared state (res, req)
     const { roles } = res.locals.user
 
     const _roles = extractRoles(roles)

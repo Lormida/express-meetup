@@ -11,12 +11,11 @@ class UserController {
   getAllUsers = catchAsync(async (req: Request<GetUserInput['params']>, res: Response) => {
     const handlerFactory = new HandlerFactory(UserModel)
 
-    const converterToDTO = (users: UserDocument[]) => users.map((m) => m && new UserDTO(m))
-    // TODO: add populating options
+    const converterToDTO = (users: UserDocument[]) => users.map((m) => new UserDTO(m))
 
     const data = await handlerFactory.getAll<UserDocument | null>(req.query)
 
-    return res.send({
+    return res.status(200).send({
       length: data?.length || 0,
       data: data?.length && converterToDTO(data as UserDocument[]),
     })
@@ -30,10 +29,10 @@ class UserController {
       return next(HttpError.NotFoundError('user is not found!'))
     }
 
-    return res.send(new UserDTO(user))
+    return res.status(200).send(new UserDTO(user))
   })
 
-  getUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  getUserById = catchAsync(async (req: Request<GetUserInput['params']>, res: Response, next: NextFunction) => {
     const { userId } = req.params
     const user = await userService.findUser({ _id: userId })
 
@@ -41,10 +40,10 @@ class UserController {
       return next(HttpError.NotFoundError('user is not found!'))
     }
 
-    return res.send(new UserDTO(user))
+    return res.status(200).send(new UserDTO(user))
   })
 
-  updateUser = catchAsync(async (req: Request<UpdateUserInput['params']>, res: Response, next: NextFunction) => {
+  updateUser = catchAsync(async (req: Request<{}, {}, UpdateUserInput['body']>, res: Response, next: NextFunction) => {
     const userId = res.locals.user.id
     const update = req.body
 
@@ -52,25 +51,22 @@ class UserController {
       new: true,
     })
 
-    // User wasn't found
     if (!updatedUser) {
       return next(HttpError.NotFoundError('user is not found!'))
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    res.send(new UserDTO(updatedUser!))
+    res.status(200).send(new UserDTO(updatedUser))
   })
 
-  deleteUser = catchAsync(async (req: Request<UpdateUserInput['params']>, res: Response, next: NextFunction) => {
+  deleteUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const userId = res.locals.user.id
     const removedUser = await userService.findAndDeleteUser({ _id: userId })
 
-    // User wasn't found
     if (!removedUser) {
       return next(HttpError.NotFoundError('user is not found!'))
     }
 
-    res.send(new UserDTO(removedUser))
+    res.status(200).send(new UserDTO(removedUser))
   })
 }
 

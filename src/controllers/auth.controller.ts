@@ -18,7 +18,7 @@ const registrationUser = (role: 'USER' | 'ADMIN') =>
     const userData = await authService.registration(email, name, password, [userRole._id])
     setCookie(res, 'refreshToken', userData.refreshToken)
 
-    res.send(userData)
+    res.status(201).send(userData)
   })
 
 class UserController {
@@ -30,7 +30,7 @@ class UserController {
     const userData = await authService.login(email, password)
     setCookie(res, 'refreshToken', userData.refreshToken)
 
-    res.send(userData)
+    res.status(200).send(userData)
   })
 
   logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -42,7 +42,7 @@ class UserController {
     }
 
     res.clearCookie('refreshToken')
-    return res.sendStatus(200)
+    return res.sendStatus(204)
   })
 
   refresh = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -55,7 +55,7 @@ class UserController {
 
     setCookie(res, 'refreshToken', userData.refreshToken)
 
-    res.send(userData)
+    res.status(200).send(userData)
   })
 }
 

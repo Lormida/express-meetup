@@ -32,13 +32,12 @@ const payloadOptional = {
     })
       .min(6, 'Password should be at least 6 characters long')
       .max(20, 'Password should be less than 20 characters long'),
-  }).optional(),
-  roles: array(string(z.enum(['USER', 'ADMIN']))).optional(),
+  }),
 }
 
 const params = {
   params: object({
-    meetupId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
+    userId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
   }),
 }
 
@@ -48,11 +47,6 @@ export const createUserSchema = object({
 
 export const updateUserSchema = object({
   ...payloadOptional,
-  ...params,
-})
-
-export const deleteUserSchema = object({
-  ...params,
 })
 
 export const getUserSchema = object({
@@ -62,4 +56,3 @@ export const getUserSchema = object({
 export type CreateUserInput = TypeOf<typeof createUserSchema>
 export type UpdateUserInput = TypeOf<typeof updateUserSchema>
 export type GetUserInput = TypeOf<typeof getUserSchema>
-export type DeleteUserInput = TypeOf<typeof deleteUserSchema>

@@ -5,18 +5,20 @@ interface TQueryObject {
   fields?: string
   page?: string
   limit?: string
-  partialSearch: string
+  partialSearch?: string
 }
 
 export class APIFeatures<T> {
-  excludedFields = ['page', 'sort', 'limit', 'fields']
+  excludedFields = ['page', 'sort', 'limit', 'fields'] as const
 
   constructor(public query: FilterQuery<T>, public queryObject: TQueryObject) {}
 
   filter = () => {
     const queryObj = { ...this.queryObject }
-    //@ts-expect-error fix later
-    this.excludedFields.forEach((el) => delete queryObj[el])
+
+    this.excludedFields.forEach((el) => {
+      delete queryObj[el]
+    })
 
     let queryStr = JSON.stringify(queryObj)
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)

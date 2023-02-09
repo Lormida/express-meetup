@@ -51,11 +51,15 @@ const payloadOptional = {
     }).optional(),
   }),
 }
-// TODO check date validator
 
-const params = {
+const paramsMeetup = {
   params: object({
     meetupId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
+  }),
+}
+const paramsUser = {
+  params: object({
+    userId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
   }),
 }
 
@@ -63,20 +67,50 @@ export const createMeetupSchema = object({
   ...payload,
 })
 
+export const createMeetupAdminSchema = object({
+  ...payload,
+  ...paramsUser,
+})
+
 export const updateMeetupSchema = object({
   ...payloadOptional,
-  ...params,
+  ...paramsMeetup,
+})
+
+export const updateMeetupAdminSchema = object({
+  ...payloadOptional,
+  params: object({
+    meetupId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
+    userId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
+  }),
 })
 
 export const deleteMeetupSchema = object({
-  ...params,
+  ...paramsMeetup,
+})
+export const DeleteMeetupAdminInput = object({
+  ...payloadOptional,
+  params: object({
+    meetupId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
+    userId: string().regex(new RegExp(/^[0-9a-fA-F]{24}$/), 'Incorrect ID mongoDB'),
+  }),
 })
 
 export const getMeetupSchema = object({
-  ...params,
+  ...paramsMeetup,
+})
+export const getMeetupAdminSchema = object({
+  ...paramsUser,
 })
 
 export type CreateMeetupInput = TypeOf<typeof createMeetupSchema>
+export type CreateMeetupAdminInput = TypeOf<typeof createMeetupAdminSchema>
+
 export type UpdateMeetupInput = TypeOf<typeof updateMeetupSchema>
+export type UpdateMeetupAdminInput = TypeOf<typeof updateMeetupAdminSchema>
+
 export type GetMeetupInput = TypeOf<typeof getMeetupSchema>
+export type GetMeetupAdminInput = TypeOf<typeof getMeetupAdminSchema>
+
 export type DeleteMeetupInput = TypeOf<typeof deleteMeetupSchema>
+export type DeleteMeetupAdminInput = TypeOf<typeof DeleteMeetupAdminInput>

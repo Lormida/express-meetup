@@ -61,7 +61,6 @@ class AuthService {
       return this.createSession(user)
     }
 
-    // TODO: fix it
     return null
   }
 
