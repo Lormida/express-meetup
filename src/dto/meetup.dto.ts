@@ -6,7 +6,7 @@ export class MeetupDTO {
   description: string
   tags: string[]
   place?: string
-  time: Date
+  time: DateTimeString
   host: string
   createdAt: Date
   updatedAt: Date

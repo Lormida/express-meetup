@@ -17,7 +17,7 @@ class UserController {
 
     return res.status(200).send({
       length: data?.length || 0,
-      data: data?.length && converterToDTO(data as UserDocument[]),
+      data: data?.length > 0 ? converterToDTO(data as UserDocument[]) : [],
     })
   })
 

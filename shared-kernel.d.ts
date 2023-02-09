@@ -3,6 +3,6 @@
  */
 
 declare global {
-  type UTCDateString = string
+  type DateTimeString = string
 }
 export {}

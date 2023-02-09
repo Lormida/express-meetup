@@ -16,9 +16,10 @@ const payload = {
       })
     ).min(2),
     place: string().optional(),
-    time: date({
-      invalid_type_error: "It's not a date",
+    time: string({
       required_error: 'Meetup must have a time',
+    }).datetime({
+      message: "It's not a date",
     }),
   }),
 }
@@ -45,10 +46,13 @@ const payloadOptional = {
       .min(2)
       .optional(),
     place: string().optional(),
-    time: date({
-      invalid_type_error: "It's not a date",
+    time: string({
       required_error: 'Meetup must have a time',
-    }).optional(),
+    })
+      .datetime({
+        message: "It's not a date",
+      })
+      .optional(),
   }),
 }
 

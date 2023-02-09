@@ -31,7 +31,8 @@ const payloadOptional = {
       required_error: 'Password is required',
     })
       .min(6, 'Password should be at least 6 characters long')
-      .max(20, 'Password should be less than 20 characters long'),
+      .max(20, 'Password should be less than 20 characters long')
+      .optional(),
   }),
 }
 

@@ -24,7 +24,7 @@ class MeetupController {
 
     return res.status(200).send({
       length: data?.length || 0,
-      data: data?.length && converterToDTO(data as MeetupDocument[]),
+      data: data?.length > 0 ? converterToDTO(data as MeetupDocument[]) : [],
     })
   })
 
@@ -38,7 +38,7 @@ class MeetupController {
 
     return res.status(200).send({
       length: data?.length || 0,
-      data: data?.length && converterToDTO(data as MeetupDocument[]),
+      data: data?.length > 0 ? converterToDTO(data as MeetupDocument[]) : [],
     })
   })
 
@@ -131,7 +131,7 @@ class MeetupController {
 
   updateMeetupByAdminById = catchAsync(
     async (
-      req: Request<UpdateMeetupAdminInput['params'], {}, UpdateMeetupAdminInput['body']>,
+      req: Request<UpdateMeetupAdminInput['params'], {}, UpdateMeetupAdminInput['params']>,
       res: Response,
       next: NextFunction
     ) => {

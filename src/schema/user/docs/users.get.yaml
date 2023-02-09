@@ -1,9 +1,18 @@
 components:
   schema:
-    UsersResponse:
-      type: array
-      items:
-        $ref: '#/components/schema/UserResponse'
+    Users:
+      type: object
+      required:
+        - length
+        - data
+      properties:
+        length:
+          type: number
+          example: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schema/UserResponse'
 
     UserResponse:
       type: object

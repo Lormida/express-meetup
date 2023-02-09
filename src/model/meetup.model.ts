@@ -7,7 +7,7 @@ export interface MeetupInput {
   tags: string[]
   place?: string
   host: UserDocument['_id']
-  time: Date
+  time: DateTimeString
 }
 
 export interface MeetupDocument extends MeetupInput, mongoose.Document {

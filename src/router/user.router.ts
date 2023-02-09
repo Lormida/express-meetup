@@ -3,7 +3,7 @@ import userController from '../controllers/user.controller'
 import { isAuth } from '../middleware/isAuth.middleware'
 import { protectByRoles } from '../middleware/protectedByRole.middleware'
 import validateResource from '../middleware/validateResource.middleware'
-import { deleteUserSchema, updateUserSchema } from '../schema/user/user.schema'
+import { getUserSchema, updateUserSchema } from '../schema/user/user.schema'
 
 const router = Router()
 
@@ -22,7 +22,7 @@ router.use(isAuth)
  *         content:
  *          application/json:
  *           schema:
- *              $ref: '#/components/schema/UsersResponse'
+ *              $ref: '#/components/schema/Users'
  *       401:
  *         description: "Error: Unauthorized"
  *         content:
@@ -107,7 +107,7 @@ router.patch('/user', validateResource(updateUserSchema), userController.updateU
  *            schema:
  *              $ref: '#/components/schema/UserNotAuthorized'
  */
-router.delete('/user', validateResource(deleteUserSchema), userController.deleteUser)
+router.delete('/user', userController.deleteUser)
 
 // Admin
 /**
@@ -143,6 +143,6 @@ router.delete('/user', validateResource(deleteUserSchema), userController.delete
  *             schema:
  *               $ref: '#/components/schema/UserNotFound'
  */
-router.get('/user/:userId', [protectByRoles('ADMIN'), validateResource(deleteUserSchema)], userController.getUserById)
+router.get('/user/:userId', [protectByRoles('ADMIN'), validateResource(getUserSchema)], userController.getUserById)
 
 export { router as userRouter }
