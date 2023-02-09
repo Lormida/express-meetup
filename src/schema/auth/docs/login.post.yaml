@@ -1,0 +1,14 @@
+components:
+  schema:
+    LoginUserInput:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: vasya@example.com
+        password:
+          type: string
+          example: password123

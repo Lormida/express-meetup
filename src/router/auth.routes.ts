@@ -75,6 +75,40 @@ router.post(
   [isAuth, protectByRoles('ADMIN'), validateResource(createUserSchema)],
   authController.registration('ADMIN')
 )
+
+/**
+ * @openapi
+ * '/auth/login':
+ *  post:
+ *     tags:
+ *     - Authorization
+ *     summary: Login the system
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schema/LoginUserInput'
+ *     responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schema/UserResponse'
+ *      400:
+ *         description: "Error: Bad request"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserWrongPassword'
+ *      404:
+ *         description: "Error: Bad request"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotFound'
+ */
 router.post('/login', [validateResource(loginUserSchema)], authController.login)
 
 export { router as authRouter }

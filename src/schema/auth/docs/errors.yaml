@@ -6,3 +6,18 @@ components:
         message:
           type: string
           example: User is not authorized
+
+    UserNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User with such email is not found
+
+    UserWrongPassword:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Wrong password
+
