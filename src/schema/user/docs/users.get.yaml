@@ -3,7 +3,7 @@ components:
     UsersResponse:
       type: array
       items:
-        $ref: '#/components/schema/UserAuthResponse'
+        $ref: '#/components/schema/UserResponse'
 
     UserResponse:
       type: object

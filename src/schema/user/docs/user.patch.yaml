@@ -1,0 +1,14 @@
+components:
+  schema:
+    PatchUserInput:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'email@gmail.com'
+        name:
+          type: string
+          example: 'Azamat Yarogen777'
+        password:
+          type: string
+          example: 'password123'

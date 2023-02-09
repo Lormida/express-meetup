@@ -153,6 +153,12 @@ router.post('/meetup', [validateResource(createMeetupSchema)], meetupController.
  *          application/json:
  *            schema:
  *              $ref: '#/components/schema/UserNoPermission'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/MeetupNotFound'
  */
 router.patch('/meetup/:meetupId', [validateResource(updateMeetupSchema)], meetupController.updateMeetupById)
 
@@ -235,6 +241,12 @@ router.delete('/meetup/:meetupId', [validateResource(deleteMeetupSchema)], meetu
  *           application/json:
  *             schema:
  *               $ref: '#/components/schema/UserNoPermission'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotFound'
  */
 router.get('/admin/meetups/:userId', meetupController.getMeetupsByAdmin)
 
@@ -281,6 +293,12 @@ router.get('/admin/meetups/:userId', meetupController.getMeetupsByAdmin)
  *          application/json:
  *            schema:
  *              $ref: '#/components/schema/UserNoPermission'
+ *       404:
+ *         description: "Error: Not found"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schema/UserNotFound'
  */
 router.post(
   '/admin/meetup/:userId',
@@ -322,9 +340,7 @@ router.post(
  *        content:
  *          application/json:
  *            schema:
- *              oneOf:
- *                - $ref: '#/components/schema/UserBadRequest'
- *                - $ref: '#/components/schema/MeetupBadRequest'
+ *              $ref: '#/components/schema/MeetupBadRequest'
  *      401:
  *        description: "Error: Unauthorized"
  *        content:
@@ -337,6 +353,14 @@ router.post(
  *          application/json:
  *            schema:
  *              $ref: '#/components/schema/UserNoPermission'
+ *      404:
+ *        description: "Error: Not found"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              oneOf:
+ *                - $ref: '#/components/schema/UserNotFound'
+ *                - $ref: '#/components/schema/MeetupNotFound'
  */
 router.patch(
   '/admin/meetup/:userId/:meetupId',
@@ -390,7 +414,9 @@ router.patch(
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schema/MeetupNotFound'
+ *               oneOf:
+ *                 - $ref: '#/components/schema/UserNotFound'
+ *                 - $ref: '#/components/schema/MeetupNotFound'
  */
 router.delete(
   '/admin/meetup/:userId/:meetupId',

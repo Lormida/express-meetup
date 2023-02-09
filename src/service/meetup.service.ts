@@ -2,13 +2,13 @@ import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose'
 import MeetupModel, { MeetupDocument, MeetupInput } from '../model/meetup.model'
 
 class MeetupService {
+  /** Function is not using - instead of it is using HandlerFactory getAll */
+  // findAllMeetups = (options: QueryOptions = { lean: true }) => MeetupModel.find({}, options)
+
   createMeetup = (input: MeetupInput) => MeetupModel.create(input)
 
   findMeetup = (query: FilterQuery<MeetupDocument>, options: QueryOptions = { lean: true }) =>
     MeetupModel.findOne(query, {}, options)
-
-  /** Function is not using - instead of it is using HandlerFactory getAll */
-  findAllMeetups = (options: QueryOptions = { lean: true }) => MeetupModel.find({}, options)
 
   findAndUpdateMeetup = (
     query: FilterQuery<MeetupDocument>,
@@ -18,6 +18,6 @@ class MeetupService {
 
   findAndDeleteMeetup = (query: FilterQuery<MeetupDocument>) => MeetupModel.findOneAndDelete(query)
 }
-const meetupService = new MeetupService()
 
+const meetupService = new MeetupService()
 export default meetupService

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { MeetupDTO } from '../dto/meetup.dto'
-import Meetup, { MeetupDocument } from '../model/meetup.model'
+import MeetupModel, { MeetupDocument } from '../model/meetup.model'
 import { CreateMeetupInput, GetMeetupInput, UpdateMeetupInput } from '../schema/meetup/meetup.schema'
 import meetupService from '../service/meetup.service'
 import { catchAsync } from '../utils/catchAsync'
@@ -9,7 +9,7 @@ import { HandlerFactory } from './handlerFactory.controller'
 
 class MeetupController {
   getAllMeetups = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response) => {
-    const handlerFactory = new HandlerFactory(Meetup)
+    const handlerFactory = new HandlerFactory(MeetupModel)
 
     const converterToDTO = (meetups: MeetupDocument[]) => meetups.map((m) => m && new MeetupDTO(m))
     // TODO: add populating options
@@ -24,7 +24,7 @@ class MeetupController {
 
   //TODO: fix type
   getMeetupsByAdmin = catchAsync(async (req: Request<GetMeetupInput['params']>, res: Response) => {
-    const handlerFactory = new HandlerFactory(Meetup)
+    const handlerFactory = new HandlerFactory(MeetupModel)
     //@ts-expect-error fix later
     const { userId } = req.params
 
