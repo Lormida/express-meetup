@@ -5,6 +5,9 @@ import { version } from '../../package.json'
 import log from './logger'
 
 const options: swaggerJsdoc.Options = {
+  servers: {
+    url: 'https://localhost/3000/',
+  },
   definition: {
     openapi: '3.0.0',
     info: {

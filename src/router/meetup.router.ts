@@ -11,8 +11,6 @@ import {
 } from '../schema/meetup/meetup.schema'
 const router = Router()
 
-router.use(isAuth)
-
 /**
  * @openapi
  * '/api/meetups':
@@ -29,6 +27,11 @@ router.use(isAuth)
  *              $ref: '#/components/schema/Meetups'
  */
 router.get('/meetups', meetupController.getAllMeetups)
+
+/**
+ * Add required authorizatio middleware
+ */
+router.use(isAuth)
 
 /**
  * @openapi
