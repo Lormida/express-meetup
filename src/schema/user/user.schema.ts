@@ -1,6 +1,6 @@
 import { array, object, string, TypeOf, z } from 'zod'
 
-enum UserRole {
+export enum UserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }

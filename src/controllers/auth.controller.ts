@@ -4,8 +4,9 @@ import HttpError from '../utils/HttpError'
 import RoleModel from '../model/role.model'
 import { catchAsync } from '../utils/catchAsync'
 import { setCookie } from '../utils/helpers'
+import { UserRole } from '../schema/user/user.schema'
 
-const registrationUser = (role: 'USER' | 'ADMIN') =>
+const registrationUser = (role: keyof typeof UserRole) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { email, name, password } = req.body
 
@@ -22,7 +23,7 @@ const registrationUser = (role: 'USER' | 'ADMIN') =>
   })
 
 class UserController {
-  registration = (role: 'USER' | 'ADMIN') => registrationUser(role)
+  registration = (role: keyof typeof UserRole) => registrationUser(role)
 
   login = catchAsync(async (req: Request, res: Response) => {
     const { email, password } = req.body

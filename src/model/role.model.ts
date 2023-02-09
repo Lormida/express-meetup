@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { UserRole } from '../schema/user/user.schema'
 
 export interface RoleDocument extends mongoose.Document {
   value: string
@@ -9,7 +10,7 @@ const roleSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
-    enum: ['USER', 'ADMIN'],
+    enum: [UserRole.USER, UserRole.ADMIN],
     default: 'USER',
   },
 })
